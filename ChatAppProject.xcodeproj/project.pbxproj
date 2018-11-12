@@ -14,6 +14,7 @@
 		96F777282195FE6E004F3B67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96F777272195FE6E004F3B67 /* Assets.xcassets */; };
 		96F7772B2195FE6E004F3B67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96F777292195FE6E004F3B67 /* LaunchScreen.storyboard */; };
 		96F777362195FE6E004F3B67 /* ChatAppProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F777352195FE6E004F3B67 /* ChatAppProjectTests.swift */; };
+		9E07843D219933F700F070DF /* ChatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07843C219933F700F070DF /* ChatTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		96F777312195FE6E004F3B67 /* ChatAppProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChatAppProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96F777352195FE6E004F3B67 /* ChatAppProjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAppProjectTests.swift; sourceTree = "<group>"; };
 		96F777372195FE6E004F3B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9E07843C219933F700F070DF /* ChatTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				96F777272195FE6E004F3B67 /* Assets.xcassets */,
 				96F777292195FE6E004F3B67 /* LaunchScreen.storyboard */,
 				96F7772C2195FE6E004F3B67 /* Info.plist */,
+				9E07843C219933F700F070DF /* ChatTableViewController.swift */,
 			);
 			path = ChatAppProject;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 				962501AD21975DC600FDA854 /* RegisterViewController.swift in Sources */,
 				96F777232195FE6C004F3B67 /* LoginViewController.swift in Sources */,
 				96F777212195FE6C004F3B67 /* AppDelegate.swift in Sources */,
+				9E07843D219933F700F070DF /* ChatTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
