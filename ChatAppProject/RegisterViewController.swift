@@ -7,10 +7,15 @@
 //
 
 import UIKit
+import Firebase
 
 class RegisterViewController: UIViewController {
 
     @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var txtEmail: UITextField!
+    @IBOutlet weak var txtPassword: UITextField!
+    @IBOutlet weak var txtUsername: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIView()
@@ -25,4 +30,38 @@ class RegisterViewController: UIViewController {
         registerButton.layer.borderColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0).cgColor;
     }
 
+    @IBAction func btnRegisterOnClick(_ sender: Any) {
+        
+        guard let email = txtEmail.text, let password = txtPassword.text else {
+        return
+        }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            if error != nil
+            {
+                // if error in registering
+                print(error!)
+                return
+            }
+            guard let uid = authResult?.user.uid else {
+                return
+            }
+        
+            // user successfully authenticated
+            // adding users to database
+            let ref = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/")
+            let userRef = ref.child("users").child(uid)
+            let values = ["name":self.txtUsername.text, "email":self.txtEmail.text]
+            userRef.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: { (err, ref) in
+                if err != nil{
+                    print(err!)
+                    return
+                }
+                print("user is saved successfully into database")
+            })
+            
+            
+        }
+        
+    }
 }

@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import Firebase
 
 class ChatTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        checkIfUserLoggedIn()
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -86,6 +88,28 @@ class ChatTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.destination is LoginViewController
+        {
+           logOutUser()
+        }
+    }
+    
+    func checkIfUserLoggedIn(){
+        //check if user is not logged in
+        if Auth.auth().currentUser?.uid == nil{
+            logOutUser()
+        }
+    }
+    
+    func logOutUser(){
+        do{
+            try Auth.auth().signOut()
+        }catch let logoutError{
+            print(logoutError)
+        }
+    }
     
     
 }

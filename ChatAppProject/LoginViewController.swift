@@ -7,14 +7,20 @@
 //
 
 import UIKit
+import Firebase
 
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var txtEmail: UITextField!
+    @IBOutlet weak var txtPassword: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIView()
     }
+    
+    
     
     // MARK: Private Functions
     private func setUIView()
@@ -24,6 +30,28 @@ class LoginViewController: UIViewController {
         loginButton.layer.cornerRadius = 21.0;
         loginButton.layer.borderColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0).cgColor;
     }
+    
+    
+    @IBAction func btnLoginOnClick(_ sender: Any) {
+        let selfObj = self
+        guard let email = txtEmail.text, let password = txtPassword.text else {
+            return
+        }
+        Auth.auth().signIn(withEmail: email, password: password, completion: {
+            (user, error) in
+            
+            if error != nil
+            {
+                print(error!)
+                return
+            }
+                //Login successful 
+                let navObj = ChatTableViewController()
+                selfObj.navigationController?.pushViewController(navObj, animated: true)
+        })
+        
+    }
+    
 
 
 }

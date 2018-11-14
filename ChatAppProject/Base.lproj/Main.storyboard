@@ -61,6 +61,9 @@
                                         </fragment>
                                     </attributedString>
                                 </state>
+                                <connections>
+                                    <action selector="btnLoginOnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mct-PA-pHV"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New user ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AYX-zd-fjT">
                                 <rect key="frame" x="101" y="606.5" width="90" height="20.5"/>
@@ -116,11 +119,13 @@
                     </view>
                     <connections>
                         <outlet property="loginButton" destination="htK-wM-cIt" id="q4T-lM-h2y"/>
+                        <outlet property="txtEmail" destination="ndw-Dr-Cpn" id="gbr-ek-f5a"/>
+                        <outlet property="txtPassword" destination="eaj-Yd-lJl" id="qms-2O-QoB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="61.600000000000001" y="26.53673163418291"/>
+            <point key="canvasLocation" x="68" y="26.53673163418291"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="GZ0-Hh-qeo">
@@ -151,6 +156,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
+                                    <action selector="btnRegisterOnClick:" destination="n3L-qX-MTB" eventType="touchUpInside" id="QZX-6Y-On1"/>
                                     <segue destination="Dt1-ae-oUY" kind="show" id="8df-sv-Y84"/>
                                 </connections>
                             </button>
@@ -177,7 +183,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ydy-jV-taC">
                                 <rect key="frame" x="40" y="285" width="295" height="35"/>
@@ -186,7 +192,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vnh-7g-MzN">
                                 <rect key="frame" x="40" y="230" width="295" height="35"/>
@@ -243,6 +249,9 @@
                     </view>
                     <connections>
                         <outlet property="registerButton" destination="ogy-lb-UPD" id="jFm-wE-Xns"/>
+                        <outlet property="txtEmail" destination="ydy-jV-taC" id="JSX-8X-Vpq"/>
+                        <outlet property="txtPassword" destination="DhR-Fd-fPy" id="Gxk-kc-mXa"/>
+                        <outlet property="txtUsername" destination="Vnh-7g-MzN" id="Xns-Gz-6jB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C1f-wm-1rF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -303,7 +312,7 @@
                     <navigationItem key="navigationItem" id="RqX-xy-NKi">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="p6I-6z-4Wu">
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="show" id="Hkg-NR-iHS"/>
+                                <segue destination="BYZ-38-t0r" kind="show" id="dk4-Vx-ut2"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
