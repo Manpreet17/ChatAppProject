@@ -29,17 +29,16 @@ class ChatLogViewController:UIViewController,UITextFieldDelegate {
         messageRef.observe(.childAdded, with: {(snapshot) in
             //print(snapshot);
             if let dictionary = snapshot.value as? [String: AnyObject]{
-                               let message = Message()
-                             message.setValuesForKeys(dictionary)
-                              self.messages.append(message)
+                let message = Message()
+                message.toId = dictionary["toId"] as? String
+                message.fromId = dictionary["fromId"] as? String
+                message.text = dictionary["text"] as? String
+                message.timestamp = dictionary["timestamp"] as? NSNumber
+                //message.setValuesForKeys(dictionary)
+                self.messages.append(message)
+                print(self.messages.count);
             }}, withCancel: nil)
-//        messageRef.observe(.childAdded,with: { (snapshot) in
-//            if let dictionary = snapshot.value as? [String: AnyObject]{
-//                let message = Message()
-//                message.setValuesForKeys(dictionary)
-//                self.messages.append(message)
-//                print(self.messages);
-//            }
+
         }
     
     @IBAction func sendMessage(_ sender: Any) {

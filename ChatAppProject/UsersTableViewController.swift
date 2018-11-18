@@ -44,7 +44,6 @@ class UsersTableViewController: UITableViewController {
             fatalError("The dequeued cell is not an instance of UserTableViewCell.")
         }
         
-        
         let user = users[indexPath.row]
         
         cell.userName.text = user.name
@@ -112,6 +111,24 @@ class UsersTableViewController: UITableViewController {
             }
         }, withCancel: nil)
     }
-   
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if segue.destination is ChatLogViewController{
+            print("yes")
+            guard let chatLogViewController = segue.destination as? ChatLogViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            guard let selectedUserCell = sender as? UserTableViewCell else {
+                fatalError("Unexpected sender: \(String(describing: sender))")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedUserCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let selectedUser = users[indexPath.row];
+            chatLogViewController.user = selectedUser;
+        }
+    }
     
 }
