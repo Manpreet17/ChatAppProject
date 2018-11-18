@@ -53,7 +53,6 @@ class ChatTableViewController: UITableViewController {
         cell.userEmail.text = user.email
         return cell
     }
-    
 
     /*
     // Override to support conditional editing of the table view.
@@ -105,6 +104,23 @@ class ChatTableViewController: UITableViewController {
         {
            logOutUser()
         }
+        else if segue.destination is ChatLogViewController{
+            print("yes")
+            guard let chatLogViewController = segue.destination as? ChatLogViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            guard let selectedUserCell = sender as? UserTableViewCell else {
+                fatalError("Unexpected sender: \(String(describing: sender))")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedUserCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let selectedUser = users[indexPath.row];
+            chatLogViewController.user = selectedUser;
+        }
     }
     
     func checkIfUserLoggedIn(){
@@ -137,6 +153,7 @@ class ChatTableViewController: UITableViewController {
             (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject]{
                 let user = Users()
+                user.id = snapshot.key
                 user.name = dictionary["name"] as? String
                 user.email = dictionary["email"] as? String
                 self.users.append(user)
@@ -157,6 +174,5 @@ class ChatTableViewController: UITableViewController {
         self.present(nextViewController, animated:true, completion:nil)
         
     }
-    
     
 }

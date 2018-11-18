@@ -10,20 +10,42 @@ import UIKit
 import Firebase
 
 class ChatLogViewController:UIViewController,UITextFieldDelegate {
+  
     @IBOutlet weak var messageText: UITextField!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var navigationBar: UINavigationItem!
     
+    var user : Users?
+    var messages = [Message]()
+    
     override func viewDidLoad() {
         super.viewDidLoad();
         messageText.delegate=self;
-        navigationBar.title="Chat  Log"
-    
+        navigationBar.title = user?.name;
+       // observeMessage();
 }
+   func observeMessage(){
+        let messageRef = Database.database().reference().child("messages")
+        messageRef.observe(.childAdded, with: {(snapshot) in
+            //print(snapshot);
+            if let dictionary = snapshot.value as? [String: AnyObject]{
+                               let message = Message()
+                             message.setValuesForKeys(dictionary)
+                              self.messages.append(message)
+            }}, withCancel: nil)
+//        messageRef.observe(.childAdded,with: { (snapshot) in
+//            if let dictionary = snapshot.value as? [String: AnyObject]{
+//                let message = Message()
+//                message.setValuesForKeys(dictionary)
+//                self.messages.append(message)
+//                print(self.messages);
+//            }
+        }
+    
     @IBAction func sendMessage(_ sender: Any) {
         let messageRef = Database.database().reference().child("messages")
         let childRef = messageRef.childByAutoId();
-        let toId = "manpreet"//user.id!;
+        let toId = user?.id;
         let fromId = Auth.auth().currentUser!.uid
         let timestamp = Int(NSDate().timeIntervalSince1970);
         
