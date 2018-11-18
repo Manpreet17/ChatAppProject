@@ -9,14 +9,12 @@
 import UIKit
 import Firebase
 
-class ChatTableViewController: UITableViewController {
+class UsersTableViewController: UITableViewController {
 
     var users = [Users]()
 
-    @IBOutlet weak var navBarTitle: UINavigationItem!
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkIfUserLoggedIn()
         fetchUsers()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -98,57 +96,7 @@ class ChatTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.destination is LoginViewController
-        {
-           logOutUser()
-        }
-        else if segue.destination is ChatLogViewController{
-            print("yes")
-            guard let chatLogViewController = segue.destination as? ChatLogViewController else {
-                fatalError("Unexpected destination: \(segue.destination)")
-            }
-            
-            guard let selectedUserCell = sender as? UserTableViewCell else {
-                fatalError("Unexpected sender: \(String(describing: sender))")
-            }
-            
-            guard let indexPath = tableView.indexPath(for: selectedUserCell) else {
-                fatalError("The selected cell is not being displayed by the table")
-            }
-            
-            let selectedUser = users[indexPath.row];
-            chatLogViewController.user = selectedUser;
-        }
-    }
-    
-    func checkIfUserLoggedIn(){
-        let selfObj = self
-        //check if user is not logged in
-        if Auth.auth().currentUser?.uid == nil{
-            logOutUser()
-        }
-        else{
-            let user = Auth.auth().currentUser?.uid
-            Database.database().reference().child("users").child(user!).observeSingleEvent(of: .value, with:  {
-                (snapshot) in
-                if let dictionary = snapshot.value as? [String: AnyObject]{
-                   selfObj.navBarTitle.title = dictionary["name"] as? String
-                }
-            })
-        }
-    }
-    
-    func logOutUser(){
-        do{
-            try Auth.auth().signOut()
-        }catch let logoutError{
-            print(logoutError)
-        }
-    }
-    
-    func fetchUsers(){
+     func fetchUsers(){
         Database.database().reference().child("users").observe(.childAdded, with: {
             (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject]{
@@ -164,15 +112,6 @@ class ChatTableViewController: UITableViewController {
             }
         }, withCancel: nil)
     }
-    @IBAction func btnLogoutOnClick(_ sender: Any) {
-        // logout user
-        logOutUser()
-        
-        // Navigate to Login View Controller
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
-        self.present(nextViewController, animated:true, completion:nil)
-        
-    }
+   
     
 }

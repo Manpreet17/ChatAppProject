@@ -47,10 +47,9 @@ class LoginViewController: UIViewController {
             }
                 //Login successful 
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ChatTableView") as! ChatTableViewController
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MessageTableView") as! MessageTableViewController
             selfObj.present(nextViewController, animated:true, completion:nil)
         })
-        
     }
     
 

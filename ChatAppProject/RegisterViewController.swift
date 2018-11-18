@@ -31,7 +31,7 @@ class RegisterViewController: UIViewController {
     }
 
     @IBAction func btnRegisterOnClick(_ sender: Any) {
-        
+        let selfObj = self
         guard let email = txtEmail.text, let password = txtPassword.text else {
         return
         }
@@ -58,10 +58,25 @@ class RegisterViewController: UIViewController {
                     return
                 }
                 print("user is saved successfully into database")
+                selfObj.registerOnSuccess()
             })
-            
-            
         }
         
+    }
+    func registerOnSuccess(){
+        let selfObj = self
+        let alert = UIAlertController(title: "Sucessfully Registered!", message: "Congrats! You have been successfully registered. Please Login to use chat app.", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
+            (action:UIAlertAction!) in
+            selfObj.navigateToLoginScreen()
+        }))
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func navigateToLoginScreen(){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
+        self.present(nextViewController, animated:true, completion:nil)
     }
 }

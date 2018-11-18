@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatAppProject/ChatTableViewController.swift"
-            timestampString = "564208906.6636651"
+            timestampString = "564255968.0061409"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "139"
             endingLineNumber = "139"
-            landmarkName = "fetchUsers()"
+            landmarkName = "checkIfUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,13 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatAppProject/ChatTableViewController.swift"
-            timestampString = "564208906.6644681"
+            timestampString = "564255968.006256"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "142"
             endingLineNumber = "142"
-            landmarkName = "fetchUsers()"
-            landmarkType = "7">
+            landmarkName = "ChatTableViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatAppProject/ChatTableViewController.swift"
-            timestampString = "564208906.6646661"
+            timestampString = "564255968.006318"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "144"
             endingLineNumber = "144"
-            landmarkName = "fetchUsers()"
+            landmarkName = "logOutUser()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
