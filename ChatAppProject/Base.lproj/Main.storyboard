@@ -62,7 +62,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <action selector="btnLoginOnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mct-PA-pHV"/>
+                                    <action selector="btnLoginOnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bue-cZ-65h"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New user ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AYX-zd-fjT">
@@ -357,12 +357,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iib-fu-blL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2559" y="27"/>
+            <point key="canvasLocation" x="2599" y="27"/>
         </scene>
         <!--UserViewController-->
         <scene sceneID="dnn-Y0-L5s">
             <objects>
-                <viewController title="UserViewController" id="NbG-Mm-VBe" sceneMemberID="viewController">
+                <viewController title="UserViewController" id="NbG-Mm-VBe" customClass="ChatLogViewController" customModule="ChatAppProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HtB-Xm-uQt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -405,6 +405,9 @@
                                 <rect key="frame" x="334" y="629" width="36" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Send"/>
+                                <connections>
+                                    <action selector="sendMessage:" destination="NbG-Mm-VBe" eventType="touchUpInside" id="l8a-oi-GBG"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -423,6 +426,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BwH-Gh-XUe"/>
                     </view>
+                    <connections>
+                        <outlet property="messageText" destination="WKc-Hu-Hge" id="ayy-i2-2WK"/>
+                        <outlet property="navigationBar" destination="IJ7-vT-OJ4" id="bOo-2J-OYO"/>
+                        <outlet property="sendButton" destination="8i4-k2-XKp" id="x1P-NE-5Xn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xVd-MR-hB0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
