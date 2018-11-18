@@ -46,8 +46,9 @@ class LoginViewController: UIViewController {
                 return
             }
                 //Login successful 
-                let navObj = ChatTableViewController()
-                selfObj.navigationController?.pushViewController(navObj, animated: true)
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ChatTableView") as! ChatTableViewController
+            selfObj.present(nextViewController, animated:true, completion:nil)
         })
         
     }

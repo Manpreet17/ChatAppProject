@@ -18,6 +18,8 @@
 		96F777362195FE6E004F3B67 /* ChatAppProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F777352195FE6E004F3B67 /* ChatAppProjectTests.swift */; };
 		9E07843D219933F700F070DF /* ChatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07843C219933F700F070DF /* ChatTableViewController.swift */; };
 		9E093548219A920900756447 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E093547219A920900756447 /* GoogleService-Info.plist */; };
+		9E6482F821A1072200FFE38C /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6482F721A1072200FFE38C /* Users.swift */; };
+		9E6482FA21A10CC600FFE38C /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6482F921A10CC600FFE38C /* UserTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		96F777372195FE6E004F3B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E07843C219933F700F070DF /* ChatTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewController.swift; sourceTree = "<group>"; };
 		9E093547219A920900756447 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9E6482F721A1072200FFE38C /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Users.swift; path = Pods/Users.swift; sourceTree = SOURCE_ROOT; };
+		9E6482F921A10CC600FFE38C /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		FFAD61A765A584F711A308D0 /* Pods-ChatAppProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAppProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatAppProject/Pods-ChatAppProject.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,6 +119,8 @@
 				96F7772C2195FE6E004F3B67 /* Info.plist */,
 				9E07843C219933F700F070DF /* ChatTableViewController.swift */,
 				9E093547219A920900756447 /* GoogleService-Info.plist */,
+				9E6482F721A1072200FFE38C /* Users.swift */,
+				9E6482F921A10CC600FFE38C /* UserTableViewCell.swift */,
 			);
 			path = ChatAppProject;
 			sourceTree = "<group>";
@@ -320,6 +326,8 @@
 				962501AD21975DC600FDA854 /* RegisterViewController.swift in Sources */,
 				96F777232195FE6C004F3B67 /* LoginViewController.swift in Sources */,
 				96F777212195FE6C004F3B67 /* AppDelegate.swift in Sources */,
+				9E6482F821A1072200FFE38C /* Users.swift in Sources */,
+				9E6482FA21A10CC600FFE38C /* UserTableViewCell.swift in Sources */,
 				9E07843D219933F700F070DF /* ChatTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,10 +11,13 @@ import Firebase
 
 class ChatTableViewController: UITableViewController {
 
+    var users = [Users]()
+
+    @IBOutlet weak var navBarTitle: UINavigationItem!
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserLoggedIn()
-        
+        fetchUsers()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -26,23 +29,31 @@ class ChatTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return users.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        // Table view cells are reused and should be dequeued using a cell identifier.
+        let cellIdentifier = "UserTableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UserTableViewCell  else {
+            fatalError("The dequeued cell is not an instance of UserTableViewCell.")
+        }
+        
+        
+        let user = users[indexPath.row]
+        
+        cell.userName.text = user.name
+        cell.userEmail.text = user.email
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -97,9 +108,19 @@ class ChatTableViewController: UITableViewController {
     }
     
     func checkIfUserLoggedIn(){
+        let selfObj = self
         //check if user is not logged in
         if Auth.auth().currentUser?.uid == nil{
             logOutUser()
+        }
+        else{
+            let user = Auth.auth().currentUser?.uid
+            Database.database().reference().child("users").child(user!).observeSingleEvent(of: .value, with:  {
+                (snapshot) in
+                if let dictionary = snapshot.value as? [String: AnyObject]{
+                   selfObj.navBarTitle.title = dictionary["name"] as? String
+                }
+            })
         }
     }
     
@@ -109,6 +130,32 @@ class ChatTableViewController: UITableViewController {
         }catch let logoutError{
             print(logoutError)
         }
+    }
+    
+    func fetchUsers(){
+        Database.database().reference().child("users").observe(.childAdded, with: {
+            (snapshot) in
+            if let dictionary = snapshot.value as? [String: AnyObject]{
+                let user = Users()
+                user.name = dictionary["name"] as? String
+                user.email = dictionary["email"] as? String
+                self.users.append(user)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                
+            }
+        }, withCancel: nil)
+    }
+    @IBAction func btnLogoutOnClick(_ sender: Any) {
+        // logout user
+        logOutUser()
+        
+        // Navigate to Login View Controller
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
+        self.present(nextViewController, animated:true, completion:nil)
+        
     }
     
     
