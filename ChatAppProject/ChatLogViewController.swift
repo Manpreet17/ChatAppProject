@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICollectionViewDelegateFlowLayout {
+class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var user : Users?{
     didSet{
         print(user?.name as Any)
@@ -42,8 +42,21 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         let containerView = UIView()
         containerView.backgroundColor = UIColor.white
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         view.addSubview(containerView)
+        
+        let uploadImageView = UIImageView()
+        uploadImageView.image = UIImage(named: "photoLibrary")
+        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
+        uploadImageView.isUserInteractionEnabled = true
+        uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadImage)))
+        containerView.addSubview(uploadImageView)
+        //x,y,w,h
+        uploadImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        uploadImageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        uploadImageView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
         
 //        let navItem = UINavigationItem(title: "SomeTitle");
 //        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
@@ -70,7 +83,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         
         containerView.addSubview(messageText)
         //x,y,w,h
-        messageText.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
+        messageText.leftAnchor.constraint(equalTo: uploadImageView.rightAnchor, constant: 8).isActive = true
         messageText.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         messageText.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
         messageText.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
@@ -89,6 +102,13 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MessageTableViewController") as! MessageTableViewController
         self.present(nextViewController, animated:true, completion:nil)
+    }
+    @objc func handleUploadImage(){
+        //incomplete
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.allowsEditing = true;
+        imagePickerController.delegate = self;
+        
     }
     func observeMessages(){
         guard let uid = Auth.auth().currentUser?.uid, let toId = user?.id else {
@@ -155,6 +175,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     }
     
     @objc func sendMessage() {
+        //observed error here to be discussed
         let messageRef = Database.database().reference().child("messages")
         let childRef = messageRef.childByAutoId();
         let toId = user!.id!;
