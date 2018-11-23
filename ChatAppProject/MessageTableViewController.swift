@@ -10,87 +10,107 @@ import UIKit
 import Firebase
 
 class MessageTableViewController: UITableViewController {
-
+    
     @IBOutlet weak var btnLogout: UIBarButtonItem!
     @IBOutlet weak var txtTitle: UINavigationItem!
     
-    
+    var messages = [Message]()
+    var messagesDictionary = [String: Message]()
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserLoggedIn()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-
+    func observeUserMessages(){
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        let usermessageRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(uid)
+        usermessageRef.observe(.childAdded, with: {(snapshot) in
+            let messageId = snapshot.key;
+            let messageRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("messages").child(messageId)
+            messageRef.observe(.value, with: {(snapshot) in
+                if let dictionary = snapshot.value as? [String: AnyObject]{
+                    let message = Message()
+                    message.toId = dictionary["toId"] as? String
+                    message.fromId = dictionary["fromId"] as? String
+                    message.text = dictionary["text"] as? String
+                    message.timestamp = dictionary["timestamp"] as? NSNumber
+                    self.messages.append(message)
+                    if let partnerId = message.partnerId(){
+                        self.messagesDictionary[partnerId] = message
+                        self.messages = Array(self.messagesDictionary.values)
+                        self.messages.sort(by: {(message1, message2)-> Bool in
+                            return message1.timestamp!.intValue > message2.timestamp!.intValue
+                        })
+                    }
+                    DispatchQueue.main.async(execute: {
+                        self.tableView.reloadData()
+                    })
+                }},withCancel: nil)
+        },withCancel: nil)
+    }
+    func observeMessage(){
+        let messageRef = Database.database().reference().child("messages")
+        messageRef.observe(.childAdded, with: {(snapshot) in
+            if let dictionary = snapshot.value as? [String: AnyObject]{
+                let message = Message()
+                message.toId = dictionary["toId"] as? String
+                message.fromId = dictionary["fromId"] as? String
+                message.text = dictionary["text"] as? String
+                message.timestamp = dictionary["timestamp"] as? NSNumber
+                self.messages.append(message)
+                if let toId = message.toId{
+                self.messagesDictionary[toId] = message
+                self.messages = Array(self.messagesDictionary.values)
+                    self.messages.sort(by: {(message1, message2)-> Bool in
+                        return message1.timestamp!.intValue > message2.timestamp!.intValue
+                    })
+                }
+                DispatchQueue.main.async(execute: {
+                    self.tableView.reloadData()
+                })
+            }}, withCancel: nil)
+    }
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return messages.count
     }
-
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cellIdentifier = "MessageTableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? MessageTableViewCell  else {
+            fatalError("The dequeued cell is not an instance of MessageTableViewCell.")
+        }
+        let message = messages[indexPath.row]
+       
+        if let id = message.partnerId(){
+            let ref =  Database.database().reference().child("users").child(id)
+            ref.observeSingleEvent(of: .value, with: {(snapshot) in
+                 if let dictionary = snapshot.value as? [String: AnyObject]{
+                    cell.toId.text = dictionary["name"] as? String
+                }
+            })
+        }
+        if let timeInSeconds = message.timestamp?.doubleValue{
+            let timeStampDate = NSDate(timeIntervalSince1970: timeInSeconds)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "hh:mm:ss a"
+            cell.timestamp.text=dateFormatter.string(from: timeStampDate as Date)
+            
+        }
+        cell.messageText.text=message.text
+        
         return cell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     func checkIfUserLoggedIn(){
         let selfObj = self
@@ -104,8 +124,52 @@ class MessageTableViewController: UITableViewController {
                 (snapshot) in
                 if let dictionary = snapshot.value as? [String: AnyObject]{
                     selfObj.txtTitle.title = dictionary["name"] as? String
+                    selfObj.messages.removeAll();
+                    selfObj.messagesDictionary.removeAll();
+                    selfObj.tableView.reloadData();
+                    selfObj.observeUserMessages()
                 }
             })
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.destination is ChatLogViewController{
+            guard let chatLogViewController = segue.destination as? ChatLogViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            guard let selectedUserCell = sender as? MessageTableViewCell else {
+                fatalError("Unexpected sender: \(String(describing: sender))")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedUserCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let message = messages[indexPath.row]
+            guard let partnerId = message.partnerId() else{
+                return
+            }
+            let userRef = Database.database().reference().child("users").child(partnerId)
+            
+            userRef.observeSingleEvent(of: .value, with: {(snapshot) in
+                guard let dictionary = snapshot.value as? [String: AnyObject] else{
+                    return
+                }
+                let user = Users()
+                user.id = partnerId
+                // user.id = dictionary["id"] as? String
+                user.name = dictionary["name"] as? String
+                user.email = dictionary["email"] as? String
+                
+                //let chatLogController = ChatLogViewController(collectionViewLayout: UICollectionViewFlowLayout())
+                let selectedUser =  user;
+                chatLogViewController.user = selectedUser;
+                //chatLogController.user =  users[indexPath.row]
+                //self.navigationController?.pushViewController(chatLogController, animated: true)
+            })
+           
         }
     }
     
@@ -128,27 +192,5 @@ class MessageTableViewController: UITableViewController {
         
     }
     
-    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //        if segue.destination is LoginViewController
-    //        {
-    //           logOutUser()
-    //        }
-    //        else if segue.destination is ChatLogViewController{
-    //            print("yes")
-    //            guard let chatLogViewController = segue.destination as? ChatLogViewController else {
-    //                fatalError("Unexpected destination: \(segue.destination)")
-    //            }
-    //
-    //            guard let selectedUserCell = sender as? UserTableViewCell else {
-    //                fatalError("Unexpected sender: \(String(describing: sender))")
-    //            }
-    //
-    //            guard let indexPath = tableView.indexPath(for: selectedUserCell) else {
-    //                fatalError("The selected cell is not being displayed by the table")
-    //            }
-    //
-    //            let selectedUser = users[indexPath.row];
-    //            chatLogViewController.user = selectedUser;
-    //        }
-    //    }
+    
 }
