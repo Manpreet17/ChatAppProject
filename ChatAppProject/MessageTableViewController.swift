@@ -69,9 +69,19 @@ class MessageTableViewController: UITableViewController {
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
                 })
+//                self.timer?.invalidate()
+//                print("canceled our timer")
+//
+//                self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+//                print("schedule table reload in 0.1 sec")
+                
             }}, withCancel: nil)
     }
+    //var timer: Timer?
     
+    @objc func handleReloadTable() {
+        
+    }
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {

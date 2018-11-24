@@ -20,24 +20,32 @@ class ChatCollectionViewCell: UICollectionViewCell {
         tView.isEditable = false
         return tView
     }()
+    
+    static let blueColor = UIColor(red: 0/255, green: 137/255, blue: 249/255, alpha: 1.0)
     let bubblesView: UIView = {
        let view = UIView()
-        view.backgroundColor = UIColor(red: 0/255, green: 137/255, blue: 249/255, alpha: 1.0)
+        view.backgroundColor = blueColor
         view.translatesAutoresizingMaskIntoConstraints = false;
         view.layer.cornerRadius = 10;
         view.layer.masksToBounds = true
         return view;
     }()
+    
+    var bubbleViewRightAnchor: NSLayoutConstraint?
+    var bubbleViewLeftAnchor: NSLayoutConstraint?
     var bubbleWidthConstraint : NSLayoutConstraint?
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(bubblesView)
         addSubview(textView)
         
-        bubblesView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
+        bubbleViewRightAnchor = bubblesView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8)
+        bubbleViewRightAnchor?.isActive = true
+        bubbleViewLeftAnchor = bubblesView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8)
         bubblesView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         bubbleWidthConstraint = bubblesView.widthAnchor.constraint(equalToConstant: 200)
         bubbleWidthConstraint?.isActive = true
+        
         bubblesView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         
         textView.leftAnchor.constraint(equalTo: bubblesView.leftAnchor, constant: 8).isActive = true

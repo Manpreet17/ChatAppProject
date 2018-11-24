@@ -11,10 +11,10 @@ import Firebase
 
 class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var user : Users?{
-    didSet{
-        print(user?.name as Any)
-         //navigationBar?.title = user?.name
-        observeMessages();
+        didSet{
+            print(user?.name as Any)
+            //navigationBar?.title = user?.name
+            observeMessages();
         }}
     var messages = [Message]()
     
@@ -35,14 +35,29 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         setupInputComponents()
-      //  observeMessages()
+        setupKeyBoardObserver()
+        //  observeMessages()
         //self.navigationItem.title = user?.name
-}
+    }
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        
+//        NotificationCenter.default.removeObserver(self)
+//    }
+    
+    func setupKeyBoardObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    var containerViewBottomAnchor: NSLayoutConstraint?
+    
     func setupInputComponents() {
         let containerView = UIView()
         containerView.backgroundColor = UIColor.white
         containerView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.addSubview(containerView)
         
         let uploadImageView = UIImageView()
@@ -58,15 +73,16 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         uploadImageView.heightAnchor.constraint(equalToConstant: 35).isActive = true
         
         
-//        let navItem = UINavigationItem(title: "SomeTitle");
-//        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
-//        containerView.addSubview(navBar);
-//        navItem.rightBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
-//        navBar.setItems([navItem], animated: false);
+        //        let navItem = UINavigationItem(title: "SomeTitle");
+        //        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+        //        containerView.addSubview(navBar);
+        //        navItem.rightBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
+        //        navBar.setItems([navItem], animated: false);
         //ios9 constraint anchors
         //x,y,w,h
         containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        containerViewBottomAnchor = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        containerViewBottomAnchor?.isActive = true
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
@@ -98,6 +114,24 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         separatorLineView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
         separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
+    @objc func handleKeyboardShow(notification : NSNotification){
+        let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
+        let keyboardDuration = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
+        
+        containerViewBottomAnchor?.constant = -keyboardFrame!.height
+        UIView.animate(withDuration: keyboardDuration!, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    @objc func handleKeyboardHide(notification : NSNotification){
+        let keyboardDuration = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
+        
+        containerViewBottomAnchor?.constant = 0
+        UIView.animate(withDuration: keyboardDuration!, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    
     @objc func launchMessageTableViewController(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MessageTableViewController") as! MessageTableViewController
@@ -139,9 +173,9 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                         self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
                     })
                 }
-            
+                
+            }, withCancel: nil)
         }, withCancel: nil)
-    }, withCancel: nil)
     }
     let cellId = "cellId";
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -152,6 +186,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatCollectionViewCell
         let message = messages[indexPath.item]
         cell.textView.text = message.text
+        setUpCellUI(cell: cell, message: message)
         //set bubble width according to message
         cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: message.text!).width + 32
         return cell
@@ -163,6 +198,24 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             height = estimateHeightOfMessage(text: textMessage).height + 20
         }
         return CGSize(width: view.frame.width, height: height);
+    }
+    private func setUpCellUI(cell : ChatCollectionViewCell, message: Message){
+        
+        if message.fromId == Auth.auth().currentUser!.uid{
+            //sent message bubble
+            cell.bubblesView.backgroundColor = ChatCollectionViewCell.blueColor
+            cell.textView.textColor = UIColor.white
+            cell.bubbleViewRightAnchor?.isActive = true
+            cell.bubbleViewLeftAnchor?.isActive = false
+        }
+        else{
+            //received message bubble
+            cell.bubblesView.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
+            cell.textView.textColor = UIColor.black
+            cell.bubbleViewRightAnchor?.isActive = false
+            cell.bubbleViewLeftAnchor?.isActive = true
+        }
+        
     }
     private func estimateHeightOfMessage(text: String) -> CGRect{
         let size = CGSize(width: 200, height:1000)
@@ -196,8 +249,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             let reciepentRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(toId)
             reciepentRef.updateChildValues(values)
             print("message saved")
-            })
-       
+        })
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
