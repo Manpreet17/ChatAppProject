@@ -34,15 +34,84 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         collectionView?.alwaysBounceVertical = true;
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        //collectionView?.keyboardDismissMode = .interactive
         setupInputComponents()
-        setupKeyBoardObserver()
+        //setupKeyBoardObserver()
+        
         //  observeMessages()
         //self.navigationItem.title = user?.name
     }
 //    override func viewDidDisappear(_ animated: Bool) {
 //        super.viewDidDisappear(animated)
-//        
+//
 //        NotificationCenter.default.removeObserver(self)
+//    }
+    
+//    lazy var inputContainerView: UIView = {
+//        let containerView = UIView()
+//        containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
+//        containerView.backgroundColor = UIColor.white
+//
+//        let uploadImageView = UIImageView()
+//        uploadImageView.image = UIImage(named: "photoLibrary")
+//        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
+//        uploadImageView.isUserInteractionEnabled = true
+//        uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadImage)))
+//        containerView.addSubview(uploadImageView)
+//        //x,y,w,h
+//        uploadImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+//        uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+//        uploadImageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
+//        uploadImageView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+//
+//
+//        //        let navItem = UINavigationItem(title: "SomeTitle");
+//        //        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+//        //        containerView.addSubview(navBar);
+//        //        navItem.rightBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
+//        //        navBar.setItems([navItem], animated: false);
+//        //ios9 constraint anchors
+//        //x,y,w,h
+//        containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//        containerViewBottomAnchor = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//        containerViewBottomAnchor?.isActive = true
+//        containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//        containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//
+//        let sendButton = UIButton(type: .system)
+//        sendButton.setTitle("Send", for: UIControl.State())
+//        sendButton.translatesAutoresizingMaskIntoConstraints = false
+//        sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+//        containerView.addSubview(sendButton)
+//        //x,y,w,h
+//        sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+//        sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+//        sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+//        sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
+//
+//        containerView.addSubview(messageText)
+//        //x,y,w,h
+//        messageText.leftAnchor.constraint(equalTo: uploadImageView.rightAnchor, constant: 8).isActive = true
+//        messageText.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+//        messageText.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
+//        messageText.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
+//
+//        let separatorLineView = UIView()
+//        separatorLineView.backgroundColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0);
+//        separatorLineView.translatesAutoresizingMaskIntoConstraints = false
+//        containerView.addSubview(separatorLineView)
+//        //x,y,w,h
+//        separatorLineView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+//        separatorLineView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+//        separatorLineView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
+//        separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+//        return containerView
+//    }()
+    
+//    override var inputAccessoryView: UIView? {
+//        get {
+//            return inputContainerView
+//        }
 //    }
     
     func setupKeyBoardObserver(){
@@ -113,6 +182,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         separatorLineView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
         separatorLineView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
         separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
     }
     @objc func handleKeyboardShow(notification : NSNotification){
         let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
@@ -149,7 +219,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             return
         }
         
-        let userMessagesRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(uid)
+        let userMessagesRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(uid).child(toId)
         userMessagesRef.observe(.childAdded, with: { (snapshot) in
             
             let messageId = snapshot.key
@@ -164,7 +234,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                 message.fromId = dictionary["fromId"] as? String
                 message.text = dictionary["text"] as? String
                 message.timestamp = dictionary["timestamp"] as? NSNumber
-                if message.partnerId() == self.user?.id{
+                //if message.partnerId() == self.user?.id{
                     self.messages.append(message)
                     DispatchQueue.main.async(execute: {
                         self.collectionView?.reloadData()
@@ -172,7 +242,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                         let indexPath = IndexPath(item: self.messages.count - 1, section: 0)
                         self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
                     })
-                }
+                //}
                 
             }, withCancel: nil)
         }, withCancel: nil)
@@ -242,11 +312,11 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                 return
             }
             self.messageText.text = nil;
-            let ref = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(fromId)
+            let ref = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(fromId).child(toId)
             let messageId = childRef.key;
             let values = [messageId:1]
             ref.updateChildValues(values)
-            let reciepentRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(toId)
+            let reciepentRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(toId).child(fromId)
             reciepentRef.updateChildValues(values)
             print("message saved")
         })
