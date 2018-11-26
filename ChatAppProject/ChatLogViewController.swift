@@ -13,11 +13,11 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     var user : Users?{
         didSet{
             print(user?.name as Any)
-            //navigationBar?.title = user?.name
+           self.navItem.title  = user?.name
             observeMessages();
         }}
     var messages = [Message]()
-    
+
     lazy var messageText: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter message..."
@@ -25,18 +25,33 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         textField.delegate = self
         return textField
     }()
+    
+    lazy var navItem: UINavigationItem = {
+        let navItem = UINavigationItem(title: "SomeTitle");
+        return navItem
+    }()
+    
+    lazy var navBar: UINavigationBar = {
+        //let navItem = UINavigationItem(title: "SomeTitle");
+        let navItem = self.navItem
+        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
+        navBar.setItems([navItem], animated: false);
+        return navBar
+    }()
+    
     override func viewDidLoad() {
         
         super.viewDidLoad();
         messageText.delegate=self;
-        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 58, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 58, right: 0)
         collectionView?.alwaysBounceVertical = true;
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-        //collectionView?.keyboardDismissMode = .interactive
+    //  collectionView?.keyboardDismissMode = .interactive
         setupInputComponents()
-        //setupKeyBoardObserver()
+    //  setupKeyBoardObserver()
         
         //  observeMessages()
         //self.navigationItem.title = user?.name
@@ -107,7 +122,6 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
 //        separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
 //        return containerView
 //    }()
-    
 //    override var inputAccessoryView: UIView? {
 //        get {
 //            return inputContainerView
@@ -126,6 +140,16 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         let containerView = UIView()
         containerView.backgroundColor = UIColor.white
         containerView.translatesAutoresizingMaskIntoConstraints = false
+//        let navItem = UINavigationItem(title: "SomeTitle");
+//        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+        view.addSubview(navBar);
+//        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
+//        navBar.setItems([navItem], animated: false);
+        navBar.translatesAutoresizingMaskIntoConstraints = false
+        navBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive =  true
+        navBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive =  true
+        navBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
+        navBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
         view.addSubview(containerView)
         
@@ -140,15 +164,10 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         uploadImageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
         uploadImageView.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        
-        
-        //        let navItem = UINavigationItem(title: "SomeTitle");
-        //        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
-        //        containerView.addSubview(navBar);
-        //        navItem.rightBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
-        //        navBar.setItems([navItem], animated: false);
+       
         //ios9 constraint anchors
         //x,y,w,h
+        //containerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 45).isActive = true
         containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         containerViewBottomAnchor = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         containerViewBottomAnchor?.isActive = true
