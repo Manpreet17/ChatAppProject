@@ -18,6 +18,7 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
     var locationManager:CLLocationManager!
     override func viewDidLoad() {
         super.viewDidLoad()
+        backButton.action = #selector(loadController)
         determineMyCurrentLocation();
     }
     func determineMyCurrentLocation() {
@@ -30,7 +31,9 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
             //locationManager.startUpdatingHeading()
         }
     }
-    
+    @objc func loadController(){
+        loadChatLogController();
+    }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let userLocation:CLLocation = locations[0] as CLLocation
         let center = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
@@ -84,8 +87,16 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
             let reciepentRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(toId).child(fromId)
             reciepentRef.updateChildValues(values)
             print("message saved")
+            self.loadChatLogController();
         })
 
+    }
+    func loadChatLogController(){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UserViewController") as! ChatLogViewController
+        nextViewController.user = self.user
+        self.present(nextViewController, animated:true, completion:nil)
+        
     }
     func openMapForPlace() {
         
