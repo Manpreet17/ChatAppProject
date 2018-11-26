@@ -374,7 +374,7 @@
         <!--LocationViewController-->
         <scene sceneID="6mQ-kj-n9P">
             <objects>
-                <viewController title="LocationViewController" id="WTd-tJ-e4c" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LocationViewController" title="LocationViewController" id="WTd-tJ-e4c" customClass="LocationViewController" customModule="ChatAppProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Mjj-nA-YrW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -397,6 +397,9 @@
                                 <rect key="frame" x="45" y="623" width="200" height="43"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Send this Location"/>
+                                <connections>
+                                    <action selector="sendLocation:" destination="WTd-tJ-e4c" eventType="touchUpInside" id="GMC-2O-wed"/>
+                                </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="location" translatesAutoresizingMaskIntoConstraints="NO" id="H4U-QM-ChP">
                                 <rect key="frame" x="5" y="627" width="35" height="35"/>
@@ -422,10 +425,14 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jeY-uv-OBL"/>
                     </view>
+                    <connections>
+                        <outlet property="backButton" destination="bkg-9Y-Odz" id="0yg-Hy-Q6q"/>
+                        <outlet property="map" destination="fNI-J9-9lW" id="92V-mT-elA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Y5-MK-HW6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4376.8000000000002" y="26.53673163418291"/>
+            <point key="canvasLocation" x="3545" y="43"/>
         </scene>
         <!--MessageTableViewController-->
         <scene sceneID="JiO-cU-Hi5">

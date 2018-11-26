@@ -13,6 +13,8 @@ class Message: NSObject{
     var fromId: String?
     var toId: String?
     var text: String?
+    var latitude: Double?
+    var longitude: Double?
     var timestamp: NSNumber?
     
     func partnerId() -> String?{

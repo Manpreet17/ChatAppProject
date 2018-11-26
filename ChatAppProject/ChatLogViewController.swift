@@ -153,6 +153,17 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         
         view.addSubview(containerView)
         
+        let sendLocationView = UIImageView()
+        sendLocationView.image = UIImage(named: "location")
+        sendLocationView.translatesAutoresizingMaskIntoConstraints = false
+        sendLocationView.isUserInteractionEnabled = true
+        sendLocationView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSendLocation)))
+        containerView.addSubview(sendLocationView)
+        sendLocationView.leftAnchor.constraint(equalTo: containerView.leftAnchor,constant: 3).isActive = true
+        sendLocationView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        sendLocationView.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        sendLocationView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
         let uploadImageView = UIImageView()
         uploadImageView.image = UIImage(named: "photoLibrary")
         uploadImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -160,11 +171,11 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadImage)))
         containerView.addSubview(uploadImageView)
         //x,y,w,h
-        uploadImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        uploadImageView.leftAnchor.constraint(equalTo: sendLocationView.rightAnchor,constant: 8).isActive = true
         uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         uploadImageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
         uploadImageView.heightAnchor.constraint(equalToConstant: 35).isActive = true
-       
+        
         //ios9 constraint anchors
         //x,y,w,h
         //containerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 45).isActive = true
@@ -233,6 +244,13 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         imagePickerController.delegate = self;
         
     }
+    @objc func handleSendLocation(){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LocationViewController") as! LocationViewController
+        nextViewController.user = user
+        self.present(nextViewController, animated:true, completion:nil)
+        
+    }
     func observeMessages(){
         guard let uid = Auth.auth().currentUser?.uid, let toId = user?.id else {
             return
@@ -251,7 +269,13 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                 let message = Message()
                 message.toId = dictionary["toId"] as? String
                 message.fromId = dictionary["fromId"] as? String
-                message.text = dictionary["text"] as? String
+                if(dictionary["text"] != nil){
+                    message.text = dictionary["text"] as? String
+                }
+                else if (dictionary["latitude"] != nil && dictionary["longitude"] != nil){
+                    message.latitude = dictionary["latitude"] as? Double
+                    message.longitude = dictionary["longitude"] as? Double
+                }
                 message.timestamp = dictionary["timestamp"] as? NSNumber
                 //if message.partnerId() == self.user?.id{
                     self.messages.append(message)
@@ -274,10 +298,19 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatCollectionViewCell
         let message = messages[indexPath.item]
-        cell.textView.text = message.text
-        setUpCellUI(cell: cell, message: message)
-        //set bubble width according to message
-        cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: message.text!).width + 32
+        if(message.text != nil){
+            cell.textView.text = message.text
+            setUpCellUI(cell: cell, message: message)
+            //set bubble width according to message
+            cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: message.text!).width + 32
+        }
+        else{
+            cell.textView.text = "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))"
+            setUpCellUI(cell: cell, message: message)
+            //set bubble width according to message
+            cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))").width + 32
+            
+        }
         return cell
     }
     
