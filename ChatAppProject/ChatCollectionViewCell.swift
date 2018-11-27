@@ -12,7 +12,6 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     let textView: UITextView = {
         let tView = UITextView()
-        tView.text = "SAMPLE TEXT FOR NOW"
         tView.font = UIFont.systemFont(ofSize: 16)
         tView.translatesAutoresizingMaskIntoConstraints = false
         tView.backgroundColor = UIColor.clear
@@ -31,6 +30,15 @@ class ChatCollectionViewCell: UICollectionViewCell {
         return view;
     }()
     
+    let messageImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 16
+        imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
+    
     var bubbleViewRightAnchor: NSLayoutConstraint?
     var bubbleViewLeftAnchor: NSLayoutConstraint?
     var bubbleWidthConstraint : NSLayoutConstraint?
@@ -38,6 +46,11 @@ class ChatCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         addSubview(bubblesView)
         addSubview(textView)
+        bubblesView.addSubview(messageImageView)
+        messageImageView.topAnchor.constraint(equalTo: bubblesView.topAnchor).isActive = true
+        messageImageView.leftAnchor.constraint(equalTo: bubblesView.leftAnchor).isActive = true
+        messageImageView.widthAnchor.constraint(equalTo: bubblesView.widthAnchor).isActive = true
+        messageImageView.heightAnchor.constraint(equalTo: bubblesView.heightAnchor).isActive = true
         
         bubbleViewRightAnchor = bubblesView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8)
         bubbleViewRightAnchor?.isActive = true

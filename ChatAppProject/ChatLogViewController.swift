@@ -237,12 +237,73 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MessageTableViewController") as! MessageTableViewController
         self.present(nextViewController, animated:true, completion:nil)
     }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        var selectedImage: UIImage?
+        if let editedImage = info[.editedImage] as? UIImage?{
+            selectedImage = editedImage
+        }
+        else if let originalImage = info[.originalImage] as? UIImage?{
+            selectedImage = originalImage
+        }
+        if let selectedImg = selectedImage{
+            uploadImageToFirebase(image: selectedImg)
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+
+    func uploadImageToFirebase(image: UIImage){
+        let selfObj = self
+        let imageName = NSUUID().uuidString
+        let ref = Storage.storage().reference().child("messageImages").child(imageName)
+        if let uploadData = image.jpegData(compressionQuality: 0.2){
+            ref.putData(uploadData, metadata: nil, completion: {(metadata, error) in
+                if error != nil{
+                    print("failed to upload image! ", error as Any)
+                    return
+                }
+                ref.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print(error!.localizedDescription)
+                        return
+                    }
+                    selfObj.sendMessageWithImageURL(imageURL: (url?.absoluteString)!)
+                })
+                })
+            
+    }
+    }
+    fileprivate func sendMessageWithImageURL(imageURL: String){
+        let messageRef = Database.database().reference().child("messages")
+        let childRef = messageRef.childByAutoId();
+        let toId = user!.id!;
+        let fromId = Auth.auth().currentUser!.uid
+        let timestamp = Int(NSDate().timeIntervalSince1970);
+        
+        let values = ["imageURL":imageURL,"toId":toId,"fromId":fromId,"timestamp":timestamp] as [String : Any]
+        childRef.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: {(err, messageRef) in
+            if err != nil{
+                print(err!)
+                return
+            }
+            self.messageText.text = nil;
+            let ref = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(fromId).child(toId)
+            let messageId = childRef.key;
+            let values = [messageId:1]
+            ref.updateChildValues(values)
+            let reciepentRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(toId).child(fromId)
+            reciepentRef.updateChildValues(values)
+            print("message saved")
+        })
+    }
     @objc func handleUploadImage(){
         //incomplete
         let imagePickerController = UIImagePickerController()
         imagePickerController.allowsEditing = true;
         imagePickerController.delegate = self;
-        
+        self.present(imagePickerController, animated: true, completion: nil)
     }
     @objc func handleSendLocation(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
@@ -276,6 +337,10 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                     message.latitude = dictionary["latitude"] as? Double
                     message.longitude = dictionary["longitude"] as? Double
                 }
+                else if (dictionary["imageURL"] != nil){
+                    message.imageURL = dictionary["imageURL"] as? String
+                    
+                }
                 message.timestamp = dictionary["timestamp"] as? NSNumber
                 //if message.partnerId() == self.user?.id{
                     self.messages.append(message)
@@ -298,21 +363,28 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatCollectionViewCell
         let message = messages[indexPath.item]
+        setUpCellUI(cell: cell, message: message)
+        
+        if message.imageURL != nil{
+            return cell
+        }
         if(message.text != nil){
             cell.textView.text = message.text
-            setUpCellUI(cell: cell, message: message)
             //set bubble width according to message
             cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: message.text!).width + 32
+            return cell
         }
-        else{
+       if (message.longitude != nil){
             cell.textView.text = "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))"
             setUpCellUI(cell: cell, message: message)
             //set bubble width according to message
             cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))").width + 32
+              return cell
             
         }
         return cell
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 80
@@ -322,7 +394,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         return CGSize(width: view.frame.width, height: height);
     }
     private func setUpCellUI(cell : ChatCollectionViewCell, message: Message){
-        
+    
         if message.fromId == Auth.auth().currentUser!.uid{
             //sent message bubble
             cell.bubblesView.backgroundColor = ChatCollectionViewCell.blueColor
@@ -337,7 +409,13 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.bubbleViewRightAnchor?.isActive = false
             cell.bubbleViewLeftAnchor?.isActive = true
         }
-        
+        if let messageImageUrl = message.imageURL {
+            cell.messageImageView.loadImageUsingCacheWithUrlString(messageImageUrl)
+            cell.messageImageView.isHidden = false
+            cell.bubblesView.backgroundColor = UIColor.clear
+        } else {
+            cell.messageImageView.isHidden = true
+        }
     }
     private func estimateHeightOfMessage(text: String) -> CGRect{
         let size = CGSize(width: 200, height:1000)

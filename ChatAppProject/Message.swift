@@ -16,6 +16,7 @@ class Message: NSObject{
     var latitude: Double?
     var longitude: Double?
     var timestamp: NSNumber?
+    var imageURL: String?
     
     func partnerId() -> String?{
         return fromId == Auth.auth().currentUser?.uid ? toId : fromId

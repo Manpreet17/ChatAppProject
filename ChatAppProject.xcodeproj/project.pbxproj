@@ -25,6 +25,7 @@
 		9E093548219A920900756447 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E093547219A920900756447 /* GoogleService-Info.plist */; };
 		9E6482F821A1072200FFE38C /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6482F721A1072200FFE38C /* Users.swift */; };
 		9E6482FA21A10CC600FFE38C /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6482F921A10CC600FFE38C /* UserTableViewCell.swift */; };
+		9EB3CD9F21ADAE5B0072999A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB3CD9E21ADAE5B0072999A /* Extensions.swift */; };
 		9ED28D5121A1F0E000E67168 /* MessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED28D5021A1F0E000E67168 /* MessageTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		9E093547219A920900756447 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9E6482F721A1072200FFE38C /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Users.swift; path = Pods/Users.swift; sourceTree = SOURCE_ROOT; };
 		9E6482F921A10CC600FFE38C /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		9EB3CD9E21ADAE5B0072999A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9ED28D5021A1F0E000E67168 /* MessageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewController.swift; sourceTree = "<group>"; };
 		FFAD61A765A584F711A308D0 /* Pods-ChatAppProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAppProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatAppProject/Pods-ChatAppProject.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -139,6 +141,7 @@
 				9E6482F921A10CC600FFE38C /* UserTableViewCell.swift */,
 				9699DC3221A13C2900954DBC /* Message.swift */,
 				96111B6F21A209BF00E262DB /* MessageTableViewCell.swift */,
+				9EB3CD9E21ADAE5B0072999A /* Extensions.swift */,
 			);
 			path = ChatAppProject;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 				96111B7021A209BF00E262DB /* MessageTableViewCell.swift in Sources */,
 				9E6482F821A1072200FFE38C /* Users.swift in Sources */,
 				9E6482FA21A10CC600FFE38C /* UserTableViewCell.swift in Sources */,
+				9EB3CD9F21ADAE5B0072999A /* Extensions.swift in Sources */,
 				9699DC3321A13C2900954DBC /* Message.swift in Sources */,
 				9699DC3121A0DCFD00954DBC /* ChatLogViewController.swift in Sources */,
 				9ED28D5121A1F0E000E67168 /* MessageTableViewController.swift in Sources */,
