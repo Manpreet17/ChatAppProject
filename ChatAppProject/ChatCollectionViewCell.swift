@@ -24,9 +24,11 @@ class ChatCollectionViewCell: UICollectionViewCell {
     let bubblesView: UIView = {
        let view = UIView()
         view.backgroundColor = blueColor
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false;
         view.layer.cornerRadius = 10;
         view.layer.masksToBounds = true
+        
         return view;
     }()
     
@@ -37,6 +39,28 @@ class ChatCollectionViewCell: UICollectionViewCell {
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFill
         return imageView
+    }()
+    
+    let locationImageView: UIImageView = {
+        let locationView = UIImageView()
+        locationView.translatesAutoresizingMaskIntoConstraints = false
+        locationView.layer.cornerRadius = 10
+        locationView.isUserInteractionEnabled = true
+        locationView.image = UIImage(named: "map")
+        locationView.layer.masksToBounds = true
+        locationView.contentMode = .scaleAspectFill
+        return locationView
+    }()
+    
+    let locationMessage: UITextView = {
+        let locationText = UITextView()
+        locationText.font = UIFont.systemFont(ofSize: 16)
+        locationText.isUserInteractionEnabled = true
+        locationText.translatesAutoresizingMaskIntoConstraints = false
+        locationText.backgroundColor = UIColor.clear
+        locationText.textColor = .white
+        locationText.isEditable = false
+        return locationText
     }()
     
     var bubbleViewRightAnchor: NSLayoutConstraint?
@@ -52,6 +76,19 @@ class ChatCollectionViewCell: UICollectionViewCell {
         messageImageView.widthAnchor.constraint(equalTo: bubblesView.widthAnchor).isActive = true
         messageImageView.heightAnchor.constraint(equalTo: bubblesView.heightAnchor).isActive = true
         
+        addSubview(locationImageView)
+        locationImageView.topAnchor.constraint(equalTo: bubblesView.topAnchor,constant : 5).isActive = true
+        locationImageView.leftAnchor.constraint(equalTo: bubblesView.leftAnchor,constant : 5).isActive = true
+        locationImageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        locationImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        locationImageView.isHidden = true;
+        addSubview(locationMessage)
+        locationMessage.leftAnchor.constraint(equalTo: locationImageView.rightAnchor, constant:  6).isActive = true
+        locationMessage.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        locationMessage.rightAnchor.constraint(equalTo: bubblesView.rightAnchor).isActive = true
+        //textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        locationMessage.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+        locationImageView.isHidden = true;
         bubbleViewRightAnchor = bubblesView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8)
         bubbleViewRightAnchor?.isActive = true
         bubbleViewLeftAnchor = bubblesView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8)

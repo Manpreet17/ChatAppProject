@@ -25,7 +25,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         textField.delegate = self
         return textField
     }()
-    
+    var latitude = 0.0;
+    var longitude = 0.0
     lazy var navItem: UINavigationItem = {
         let navItem = UINavigationItem(title: "Title");
         return navItem
@@ -367,21 +368,32 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         setUpCellUI(cell: cell, message: message)
         
         if message.imageURL != nil{
-            return cell
+           // return cell
         }
         if(message.text != nil){
             cell.textView.text = message.text
             //set bubble width according to message
             cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: message.text!).width + 32
-            return cell
+          //  return cell
         }
        if (message.longitude != nil){
-            cell.textView.text = "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))"
-            setUpCellUI(cell: cell, message: message)
-            //set bubble width according to message
-            cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))").width + 32
-              return cell
-            
+        fetchCityAndCountry(currentLocation: CLLocation(latitude: message.latitude!, longitude: message.longitude!), completion: { city,country in
+            //"latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))"
+             //"\(city), \(country)"
+        })
+        cell.locationMessage.text = "\(String(describing: message.latitude!)), \(String(describing: message.longitude!))"
+       // cell.textView.leftAnchor.constraint(equalTo: cell.locationImageView.rightAnchor, constant: 10).isActive = true
+        self.latitude = message.latitude!
+        self.longitude = message.longitude!
+        setUpCellUI(cell: cell, message: message)
+        //set bubble width according to message
+        cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))").width
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapClicked))
+        cell.locationImageView.addGestureRecognizer(tapGesture)
+        cell.locationMessage.addGestureRecognizer(tapGesture)
+        cell.addGestureRecognizer(tapGesture)
+        return cell
         }
         return cell
     }
@@ -391,6 +403,9 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         var height: CGFloat = 80
         if let textMessage = messages[indexPath.item].text{
             height = estimateHeightOfMessage(text: textMessage).height + 20
+        }
+        else if let locationMessage = messages[indexPath.item].latitude{
+            height = estimateHeightOfMessage(text: "\(locationMessage),\(locationMessage)").height + 40
         }
         return CGSize(width: view.frame.width, height: height);
     }
@@ -433,6 +448,14 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         } else {
             cell.messageImageView.isHidden = true
         }
+        if message.latitude != nil {
+            cell.locationImageView.isHidden = false;
+            cell.locationMessage.isHidden = false;
+           // cell.bubblesView.backgroundColor = UIColor.clear
+        } else {
+           cell.locationImageView.isHidden = true;
+            cell.locationMessage.isHidden = true;
+        }
     }
     private func estimateHeightOfMessage(text: String) -> CGRect{
         let size = CGSize(width: 200, height:1000)
@@ -468,6 +491,22 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             print("message saved")
         })
         
+    }
+    @objc func mapClicked(){
+        let latitude: CLLocationDegrees = self.latitude
+        let longitude: CLLocationDegrees = self.longitude
+        
+        let regionDistance:CLLocationDistance = 200
+        let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
+        let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
+        let options = [
+            MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
+            MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
+        ]
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = "Your location"
+        mapItem.openInMaps(launchOptions: options)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
