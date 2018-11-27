@@ -433,6 +433,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.textView.textColor = UIColor.white
             cell.bubbleViewRightAnchor?.isActive = true
             cell.bubbleViewLeftAnchor?.isActive = false
+            cell.locationMessage.textColor = UIColor.white
+            
         }
         else{
             //received message bubble
@@ -440,6 +442,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.textView.textColor = UIColor.black
             cell.bubbleViewRightAnchor?.isActive = false
             cell.bubbleViewLeftAnchor?.isActive = true
+            cell.locationMessage.textColor = UIColor.black
+            
         }
         if let messageImageUrl = message.imageURL {
             cell.messageImageView.loadImageUsingCacheWithUrlString(messageImageUrl)
@@ -455,6 +459,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         } else {
            cell.locationImageView.isHidden = true;
             cell.locationMessage.isHidden = true;
+            
         }
     }
     private func estimateHeightOfMessage(text: String) -> CGRect{

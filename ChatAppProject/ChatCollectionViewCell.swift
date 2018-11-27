@@ -28,7 +28,6 @@ class ChatCollectionViewCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false;
         view.layer.cornerRadius = 10;
         view.layer.masksToBounds = true
-        
         return view;
     }()
     
