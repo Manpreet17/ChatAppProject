@@ -9,8 +9,11 @@
 import UIKit
 import MapKit
 import Firebase
+import os.log
 class LocationViewController: UIViewController,CLLocationManagerDelegate {
-     var user : Users?
+    var user : Users?
+    var city : String?
+    var country : String?
     var latitude = 0.0;
     var longitude = 0.0;
     @IBOutlet weak var backButton: UIBarButtonItem!
@@ -58,13 +61,15 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
     {
         print("Error \(error)")
     }
-    
     @IBAction func sendLocation(_ sender: Any) {
         determineMyCurrentLocation();
         //openMapForPlace()
-        sendLocationMessage(latitude: latitude,longitude: longitude)
+//        fetchCityAndCountry(currentLocation: CLLocation(latitude: latitude, longitude: longitude),completion: {city in scope.city = city
+//            print(city)
+//        })
         print("user latitude = \(latitude)");
         print("user longitude = \(longitude)");
+        sendLocationMessage(latitude: latitude,longitude: longitude)
     }
     
     func sendLocationMessage(latitude: Double,longitude: Double){
@@ -91,6 +96,23 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
         })
 
     }
+    func fetchCityAndCountry(currentLocation: CLLocation,completion:@escaping (String)->()){
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(currentLocation, completionHandler: {(placemarks, error) -> Void in
+            
+            if (error != nil) {
+                
+                os_log("Reverse geocoder failed with error %s", type: OSLogType.error, error!.localizedDescription)
+            } else {
+                
+                let place = placemarks![0]
+                completion(place.locality!)
+                //scope.city = place.locality
+//                self.country = place.country
+            }
+        })
+    }
+        
     func loadChatLogController(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UserViewController") as! ChatLogViewController

@@ -8,7 +8,8 @@
 
 import UIKit
 import Firebase
-
+import MapKit
+import os.log
 class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var user : Users?{
         didSet{
@@ -17,7 +18,6 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             observeMessages();
         }}
     var messages = [Message]()
-
     lazy var messageText: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter message..."
@@ -27,7 +27,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     }()
     
     lazy var navItem: UINavigationItem = {
-        let navItem = UINavigationItem(title: "SomeTitle");
+        let navItem = UINavigationItem(title: "Title");
         return navItem
     }()
     
@@ -359,6 +359,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
     }
+    var city = ""
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatCollectionViewCell
@@ -393,6 +394,22 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         }
         return CGSize(width: view.frame.width, height: height);
     }
+    
+    func fetchCityAndCountry(currentLocation: CLLocation,completion:@escaping (String,String)->()){
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(currentLocation, completionHandler: {(placemarks, error) -> Void in
+            
+            if (error != nil) {
+                
+                os_log("Reverse geocoder failed with error %s", type: OSLogType.error, error!.localizedDescription)
+            } else {
+                
+                let place = placemarks![0]
+                completion(place.locality!,place.country!)
+            }
+        })
+    }
+    
     private func setUpCellUI(cell : ChatCollectionViewCell, message: Message){
     
         if message.fromId == Auth.auth().currentUser!.uid{
@@ -454,7 +471,12 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        sendMessage();
+        if(textField.text != ""){
+            sendMessage();}
         return true;
     }
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//    // Disabling the Save button while editing the text field.
+//    saveButton.isEnabled = false
+//}
 }
