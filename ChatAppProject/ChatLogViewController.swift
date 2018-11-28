@@ -378,16 +378,14 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         }
        if (message.longitude != nil){
         fetchCityAndCountry(currentLocation: CLLocation(latitude: message.latitude!, longitude: message.longitude!), completion: { city,country in
-            //"latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))"
-             //"\(city), \(country)"
+            DispatchQueue.main.async(execute: {
+                cell.locationMessage.text = "\(city), \(country)"
+            })
         })
-        cell.locationMessage.text = "\(String(describing: message.latitude!)), \(String(describing: message.longitude!))"
-       // cell.textView.leftAnchor.constraint(equalTo: cell.locationImageView.rightAnchor, constant: 10).isActive = true
-        self.latitude = message.latitude!
-        self.longitude = message.longitude!
-        setUpCellUI(cell: cell, message: message)
-        //set bubble width according to message
-        cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))").width
+       self.latitude = message.latitude!
+       self.longitude = message.longitude!
+       setUpCellUI(cell: cell, message: message)
+        cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))").width+32
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapClicked))
         cell.locationImageView.addGestureRecognizer(tapGesture)
