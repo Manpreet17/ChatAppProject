@@ -33,7 +33,6 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     }()
     
     lazy var navBar: UINavigationBar = {
-        //let navItem = UINavigationItem(title: "SomeTitle");
         let navItem = self.navItem
         let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
         navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
@@ -50,85 +49,9 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         collectionView?.alwaysBounceVertical = true;
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-    //  collectionView?.keyboardDismissMode = .interactive
         setupInputComponents()
-    //  setupKeyBoardObserver()
-        
-        //  observeMessages()
-        //self.navigationItem.title = user?.name
-    }
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//
-//        NotificationCenter.default.removeObserver(self)
-//    }
-    
-//    lazy var inputContainerView: UIView = {
-//        let containerView = UIView()
-//        containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
-//        containerView.backgroundColor = UIColor.white
-//
-//        let uploadImageView = UIImageView()
-//        uploadImageView.image = UIImage(named: "photoLibrary")
-//        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
-//        uploadImageView.isUserInteractionEnabled = true
-//        uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadImage)))
-//        containerView.addSubview(uploadImageView)
-//        //x,y,w,h
-//        uploadImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
-//        uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-//        uploadImageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
-//        uploadImageView.heightAnchor.constraint(equalToConstant: 35).isActive = true
-//
-//
-//        //        let navItem = UINavigationItem(title: "SomeTitle");
-//        //        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
-//        //        containerView.addSubview(navBar);
-//        //        navItem.rightBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
-//        //        navBar.setItems([navItem], animated: false);
-//        //ios9 constraint anchors
-//        //x,y,w,h
-//        containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//        containerViewBottomAnchor = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-//        containerViewBottomAnchor?.isActive = true
-//        containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-//        containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//
-//        let sendButton = UIButton(type: .system)
-//        sendButton.setTitle("Send", for: UIControl.State())
-//        sendButton.translatesAutoresizingMaskIntoConstraints = false
-//        sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
-//        containerView.addSubview(sendButton)
-//        //x,y,w,h
-//        sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
-//        sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-//        sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
-//        sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
-//
-//        containerView.addSubview(messageText)
-//        //x,y,w,h
-//        messageText.leftAnchor.constraint(equalTo: uploadImageView.rightAnchor, constant: 8).isActive = true
-//        messageText.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-//        messageText.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
-//        messageText.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
-//
-//        let separatorLineView = UIView()
-//        separatorLineView.backgroundColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0);
-//        separatorLineView.translatesAutoresizingMaskIntoConstraints = false
-//        containerView.addSubview(separatorLineView)
-//        //x,y,w,h
-//        separatorLineView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
-//        separatorLineView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-//        separatorLineView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
-//        separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-//        return containerView
-//    }()
-//    override var inputAccessoryView: UIView? {
-//        get {
-//            return inputContainerView
-//        }
-//    }
-    
+     }
+
     func setupKeyBoardObserver(){
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
@@ -141,11 +64,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         let containerView = UIView()
         containerView.backgroundColor = UIColor.white
         containerView.translatesAutoresizingMaskIntoConstraints = false
-//        let navItem = UINavigationItem(title: "SomeTitle");
-//        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
         view.addSubview(navBar);
-//        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: #selector(launchMessageTableViewController))
-//        navBar.setItems([navItem], animated: false);
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive =  true
         navBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive =  true
@@ -368,13 +287,12 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         setUpCellUI(cell: cell, message: message)
         
         if message.imageURL != nil{
-           // return cell
+            return cell
         }
-        if(message.text != nil){
+        if(message.text != nil) && (message.text != ""){
             cell.textView.text = message.text
-            //set bubble width according to message
             cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: message.text!).width + 32
-          //  return cell
+            return cell
         }
        if (message.longitude != nil){
         fetchCityAndCountry(currentLocation: CLLocation(latitude: message.latitude!, longitude: message.longitude!), completion: { city,country in
@@ -447,17 +365,21 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.messageImageView.loadImageUsingCacheWithUrlString(messageImageUrl)
             cell.messageImageView.isHidden = false
             cell.bubblesView.backgroundColor = UIColor.clear
+            cell.textView.isHidden = true
+            cell.locationImageView.isHidden = true
+            cell.locationMessage.isHidden = true
         } else {
             cell.messageImageView.isHidden = true
+            cell.textView.isHidden = false
+            cell.locationImageView.isHidden = false
+            cell.locationMessage.isHidden = false
         }
         if message.latitude != nil {
             cell.locationImageView.isHidden = false;
             cell.locationMessage.isHidden = false;
-           // cell.bubblesView.backgroundColor = UIColor.clear
         } else {
            cell.locationImageView.isHidden = true;
             cell.locationMessage.isHidden = true;
-            
         }
     }
     private func estimateHeightOfMessage(text: String) -> CGRect{
@@ -517,8 +439,4 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             sendMessage();}
         return true;
     }
-//    func textFieldDidBeginEditing(_ textField: UITextField) {
-//    // Disabling the Save button while editing the text field.
-//    saveButton.isEnabled = false
-//}
 }
