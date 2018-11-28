@@ -189,20 +189,20 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                         print(error!.localizedDescription)
                         return
                     }
-                    selfObj.sendMessageWithImageURL(imageURL: (url?.absoluteString)!)
+                    selfObj.sendMessageWithImageURL(imageURL: (url?.absoluteString)!, image: image)
                 })
                 })
             
     }
     }
-    fileprivate func sendMessageWithImageURL(imageURL: String){
+    fileprivate func sendMessageWithImageURL(imageURL: String, image: UIImage){
         let messageRef = Database.database().reference().child("messages")
         let childRef = messageRef.childByAutoId();
         let toId = user!.id!;
         let fromId = Auth.auth().currentUser!.uid
         let timestamp = Int(NSDate().timeIntervalSince1970);
         
-        let values = ["imageURL":imageURL,"toId":toId,"fromId":fromId,"timestamp":timestamp] as [String : Any]
+        let values = ["imageURL":imageURL, "imageWidth":image.size.width, "imageHeight":image.size.height,"toId":toId,"fromId":fromId,"timestamp":timestamp] as [String : Any]
         childRef.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: {(err, messageRef) in
             if err != nil{
                 print(err!)
@@ -259,6 +259,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                 }
                 else if (dictionary["imageURL"] != nil){
                     message.imageURL = dictionary["imageURL"] as? String
+                    message.imageHeight = dictionary["imageHeight"] as? NSNumber
+                    message.imageWidth = dictionary["imageWidth"] as? NSNumber
                     
                 }
                 message.timestamp = dictionary["timestamp"] as? NSNumber
@@ -287,6 +289,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         setUpCellUI(cell: cell, message: message)
         
         if message.imageURL != nil{
+            cell.bubbleWidthConstraint?.constant = 200
             return cell
         }
         if(message.text != nil) && (message.text != ""){
@@ -317,11 +320,16 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 80
+        
+        let message = messages[indexPath.item]
         if let textMessage = messages[indexPath.item].text{
             height = estimateHeightOfMessage(text: textMessage).height + 20
         }
         else if let locationMessage = messages[indexPath.item].latitude{
             height = estimateHeightOfMessage(text: "\(locationMessage),\(locationMessage)").height + 40
+        }
+        else if let imgwidth = message.imageWidth?.floatValue, let imgheight = message.imageHeight?.floatValue{
+            height = CGFloat( imgheight / imgwidth * 200)
         }
         return CGSize(width: view.frame.width, height: height);
     }

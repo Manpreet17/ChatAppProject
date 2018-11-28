@@ -17,6 +17,8 @@ class Message: NSObject{
     var longitude: Double?
     var timestamp: NSNumber?
     var imageURL: String?
+    var imageWidth:  NSNumber?
+    var imageHeight: NSNumber?
     
     func partnerId() -> String?{
         return fromId == Auth.auth().currentUser?.uid ? toId : fromId
