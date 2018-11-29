@@ -11,11 +11,13 @@ import Firebase
 
 class RegisterViewController: UIViewController {
 
+    @IBOutlet weak var reenterPassword: UITextField!
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
     @IBOutlet weak var txtUsername: UITextField!
-    
+    @IBOutlet weak var reenterPasswordHideShowImage: UIImageView!
+    @IBOutlet weak var passwordHideShowImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIView()
@@ -25,6 +27,14 @@ class RegisterViewController: UIViewController {
     private func setUIView()
     {
         //Setting register button border and color
+        passwordHideShowImage.image = UIImage(named: "passwordHide")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(passwordShowHide))
+        passwordHideShowImage.addGestureRecognizer(tapGesture)
+        passwordHideShowImage.isUserInteractionEnabled = true;
+        reenterPasswordHideShowImage.image = UIImage(named: "passwordHide")
+        let tapGestureRenter = UITapGestureRecognizer(target: self, action: #selector(reeneterPasswordShowHide))
+        reenterPasswordHideShowImage.addGestureRecognizer(tapGestureRenter)
+        reenterPasswordHideShowImage.isUserInteractionEnabled = true;
         registerButton.layer.borderWidth = 1.5;
         registerButton.layer.cornerRadius = 21.0;
         registerButton.layer.borderColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0).cgColor;
@@ -78,5 +88,29 @@ class RegisterViewController: UIViewController {
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
         self.present(nextViewController, animated:true, completion:nil)
+    }
+    @objc func passwordShowHide(){
+        if( passwordHideShowImage.image?.isEqual(UIImage(named: "passwordHide")) == true ){
+            passwordHideShowImage.image = UIImage(named: "passwordSee")
+            txtPassword.clearsOnBeginEditing = false
+            txtPassword.isSecureTextEntry = false;
+        }
+        else{
+            txtPassword.clearsOnBeginEditing = false
+            txtPassword.isSecureTextEntry = true;
+            passwordHideShowImage.image = UIImage(named: "passwordHide")
+        }
+    }
+    @objc func reeneterPasswordShowHide(){
+        if( reenterPasswordHideShowImage.image?.isEqual(UIImage(named: "passwordHide")) == true ){
+            reenterPasswordHideShowImage.image = UIImage(named: "passwordSee")
+            reenterPassword.clearsOnBeginEditing = false
+            reenterPassword.isSecureTextEntry = false;
+        }
+        else{
+            reenterPassword.clearsOnBeginEditing = false
+            reenterPassword.isSecureTextEntry = true;
+            reenterPasswordHideShowImage.image = UIImage(named: "passwordHide")
+        }
     }
 }

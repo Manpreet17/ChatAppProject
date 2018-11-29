@@ -14,7 +14,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
-    
+    @IBOutlet weak var passwordShowHideImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIView()
@@ -26,6 +26,10 @@ class LoginViewController: UIViewController {
     private func setUIView()
     {
         //Setting login button's border and color
+        passwordShowHideImage.image = UIImage(named: "passwordHide")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(passwordShowHide))
+        passwordShowHideImage.addGestureRecognizer(tapGesture)
+        passwordShowHideImage.isUserInteractionEnabled = true;
         loginButton.layer.borderWidth = 1.5;
         loginButton.layer.cornerRadius = 21.0;
         loginButton.layer.borderColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0).cgColor;
@@ -52,7 +56,19 @@ class LoginViewController: UIViewController {
         })
     }
     
-
+    @objc func passwordShowHide(){
+        if( passwordShowHideImage.image?.isEqual(UIImage(named: "passwordHide")) == true ){
+            passwordShowHideImage.image = UIImage(named: "passwordSee")
+               txtPassword.clearsOnBeginEditing = false
+                txtPassword.isSecureTextEntry = false;
+            }
+        else{
+            txtPassword.clearsOnBeginEditing = false
+            txtPassword.isSecureTextEntry = true;
+            passwordShowHideImage.image = UIImage(named: "passwordHide")
+        }
+    }
 
 }
+
 

@@ -117,8 +117,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="obb-HY-qdy"/>
                     <connections>
                         <outlet property="loginButton" destination="htK-wM-cIt" id="q4T-lM-h2y"/>
+                        <outlet property="passwordShowHideImage" destination="ffz-s8-QY3" id="b7l-PG-3tR"/>
                         <outlet property="txtEmail" destination="ndw-Dr-Cpn" id="gbr-ek-f5a"/>
                         <outlet property="txtPassword" destination="eaj-Yd-lJl" id="qms-2O-QoB"/>
                     </connections>
@@ -228,6 +230,9 @@
                                 <state key="normal" title="Login">
                                     <color key="titleColor" red="0.2722131559" green="0.61663594659999998" blue="0.98420317130000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="presentation" id="31l-Kc-PaG"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -264,7 +269,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="0cL-LE-fQX"/>
                     </view>
+                    <navigationItem key="navigationItem" id="3f8-fU-ck4"/>
                     <connections>
+                        <outlet property="passwordHideShowImage" destination="uaV-Zb-6iD" id="IWH-GU-4iQ"/>
+                        <outlet property="reenterPassword" destination="pEi-NB-L0a" id="zh3-nI-7JG"/>
+                        <outlet property="reenterPasswordHideShowImage" destination="eXB-Al-hLL" id="cSg-aC-Ws2"/>
                         <outlet property="registerButton" destination="ogy-lb-UPD" id="jFm-wE-Xns"/>
                         <outlet property="txtEmail" destination="ydy-jV-taC" id="JSX-8X-Vpq"/>
                         <outlet property="txtPassword" destination="DhR-Fd-fPy" id="Gxk-kc-mXa"/>
@@ -273,7 +282,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C1f-wm-1rF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="921" y="27"/>
+            <point key="canvasLocation" x="920.79999999999995" y="26.53673163418291"/>
         </scene>
         <!--UsersTableViewController-->
         <scene sceneID="tHX-Ae-y7c">
