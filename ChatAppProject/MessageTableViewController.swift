@@ -130,11 +130,14 @@ class MessageTableViewController: UITableViewController {
                 cell.timestamp.text=dateFormatter.string(from: timeStampDate as Date)
                 
             }
-            //if(message.text != nil){
+           // if(message.text != nil){
                cell.messageText.text=message.text
-//            }
-//            else{
-//               cell.messageText.text = "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))"
+//          }
+//           else if(message.latitude != nil){
+//            cell.messageText.text = "Location"
+//          }
+//            else if(message.imageURL != nil){
+//                cell.messageText.text = "Image"
 //            }
             return cell
         }
