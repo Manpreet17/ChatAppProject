@@ -126,8 +126,8 @@
 			children = (
 				96F777202195FE6C004F3B67 /* AppDelegate.swift */,
 				962501AC21975DC600FDA854 /* RegisterViewController.swift */,
-				96F777222195FE6C004F3B67 /* LoginViewController.swift */,
 				9699DC3021A0DCFD00954DBC /* ChatLogViewController.swift */,
+				96F777222195FE6C004F3B67 /* LoginViewController.swift */,
 				9E07843C219933F700F070DF /* UsersTableViewController.swift */,
 				9ED28D5021A1F0E000E67168 /* MessageTableViewController.swift */,
 				963FD0AC21AC7086006F52B1 /* LocationViewController.swift */,

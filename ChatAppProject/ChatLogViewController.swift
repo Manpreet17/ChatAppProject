@@ -76,8 +76,10 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive =  true
         navBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive =  true
-        navBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
+        navBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         navBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        navBar.barTintColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
+        navBar.isTranslucent = false
         
         view.addSubview(containerView)
         
@@ -106,7 +108,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         
         //ios9 constraint anchors
         //x,y,w,h
-        //containerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 45).isActive = true
+        //containerView.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 0).isActive = true
         containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         containerViewBottomAnchor = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         containerViewBottomAnchor?.isActive = true
@@ -140,7 +142,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         separatorLineView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
         separatorLineView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
         separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
+    
     }
     @objc func handleKeyboardShow(notification : NSNotification){
         let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
@@ -460,4 +462,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         }
         return true;
     }
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+   
 }
