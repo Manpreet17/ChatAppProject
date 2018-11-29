@@ -42,10 +42,10 @@ class RegisterViewController: UIViewController {
 
     @IBAction func btnRegisterOnClick(_ sender: Any) {
         let selfObj = self
-        guard let email = txtEmail.text, let password = txtPassword.text else {
-        return
-        }
-        
+        if(selfObj.checkErrorCases()){
+            guard let email = txtEmail.text, let password = txtPassword.text else {
+                return
+            }
         Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
             if error != nil
             {
@@ -68,8 +68,10 @@ class RegisterViewController: UIViewController {
                     return
                 }
                 print("user is saved successfully into database")
-                selfObj.registerOnSuccess()
+                 selfObj.registerOnSuccess()
+    
             })
+        }
         }
         
     }
@@ -83,7 +85,41 @@ class RegisterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
         
     }
-    
+    func checkErrorCases()->Bool{
+        if(txtEmail.text==""||reenterPassword.text==""||txtPassword.text==""||txtUsername.text==""){
+            let alert = UIAlertController(title: "Error", message: "All the feilds are mandatory.Please specify all the fields", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+              self.present(alert, animated: true, completion: nil)
+            return false
+        }
+        else if(!emailValidate(email: txtEmail.text!)){
+            let alert = UIAlertController(title: "Error", message: "Email is not in the correct format", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return false
+        }
+        else if(reenterPassword.text != txtPassword.text){
+            let alert = UIAlertController(title: "Error", message: "Passwords don't match", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return false
+        }
+        else if((txtPassword.text?.count)!<6){
+            let alert = UIAlertController(title: "Error", message: "Password must be atleast 6 characters long", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return false
+        }
+        return true
+       
+    }
+    func emailValidate(email:String) -> Bool {
+        
+        let formatOfEmail = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", formatOfEmail)
+        return predicate.evaluate(with: email)
+        
+    }
     func navigateToLoginScreen(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
