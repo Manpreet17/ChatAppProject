@@ -64,7 +64,10 @@ class UsersTableViewController: UITableViewController {
                 user.id = snapshot.key
                 user.name = dictionary["name"] as? String
                 user.email = dictionary["email"] as? String
-                self.users.append(user)
+                if(user.id != Auth.auth().currentUser?.uid){
+                    self.users.append(user)
+                }
+                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }

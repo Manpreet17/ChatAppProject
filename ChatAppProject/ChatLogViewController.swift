@@ -40,6 +40,14 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         return navBar
     }()
     
+    lazy var sendButton: UIButton = {
+        let sendButton = UIButton(type: .system)
+        sendButton.setTitle("Send", for: UIControl.State())
+        sendButton.translatesAutoresizingMaskIntoConstraints = false
+        sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+        return sendButton
+    }()
+    
     override func viewDidLoad() {
         
         super.viewDidLoad();
@@ -105,10 +113,10 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        let sendButton = UIButton(type: .system)
-        sendButton.setTitle("Send", for: UIControl.State())
-        sendButton.translatesAutoresizingMaskIntoConstraints = false
-        sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+//        let sendButton = UIButton(type: .system)
+//        sendButton.setTitle("Send", for: UIControl.State())
+//        sendButton.translatesAutoresizingMaskIntoConstraints = false
+//        sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         containerView.addSubview(sendButton)
         //x,y,w,h
         sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
@@ -401,6 +409,10 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     }
     
     @objc func sendMessage() {
+        if(self.messageText.text == ""){
+            
+        }
+        else{
         //observed error here to be discussed
         let messageRef = Database.database().reference().child("messages")
         let childRef = messageRef.childByAutoId();
@@ -423,7 +435,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             reciepentRef.updateChildValues(values)
             print("message saved")
         })
-        
+        }
     }
     @objc func mapClicked(){
         let latitude: CLLocationDegrees = self.latitude
@@ -444,7 +456,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if(textField.text != ""){
-            sendMessage();}
+            sendMessage();
+        }
         return true;
     }
 }

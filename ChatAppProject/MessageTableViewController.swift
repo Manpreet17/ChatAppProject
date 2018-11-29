@@ -19,6 +19,7 @@ class MessageTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserLoggedIn()
+        tableView.allowsMultipleSelectionDuringEditing = true
     }
     func observeUserMessages(){
         guard let uid = Auth.auth().currentUser?.uid else {
@@ -137,6 +138,36 @@ class MessageTableViewController: UITableViewController {
 //            }
             return cell
         }
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        guard let uid = Auth.auth().currentUser?.uid  else {
+            return
+        }
+        
+        let message = self.messages[indexPath.row]
+        
+        if let partnerId = message.partnerId() {
+            Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(uid).child(partnerId).removeValue(completionBlock: { (error, ref) in
+                
+                if error != nil {
+                    print("Failed to delete message:", error!)
+                    return
+                }
+                
+                self.messagesDictionary.removeValue(forKey: partnerId)
+                self.attemptReloadOfTable()
+                
+                //                //this is one way of updating the table, but its actually not that safe..
+                //                self.messages.removeAtIndex(indexPath.row)
+                //                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                
+            })
+        }
+    }
         
         func checkIfUserLoggedIn(){
             let selfObj = self
