@@ -15,12 +15,17 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
     @IBOutlet weak var passwordShowHideImage: UIImageView!
-    override func viewDidLoad() {
+      override func viewDidLoad() {
         super.viewDidLoad()
         setUIView()
+       // setupKeyBoardObserver()
+       }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
     }
-    
-    
     
     // MARK: Private Functions
     private func setUIView()
@@ -34,8 +39,6 @@ class LoginViewController: UIViewController {
         loginButton.layer.cornerRadius = 21.0;
         loginButton.layer.borderColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0).cgColor;
     }
-    
-    
     @IBAction func btnLoginOnClick(_ sender: Any) {
         let selfObj = self
         guard let email = txtEmail.text, let password = txtPassword.text else {
@@ -67,6 +70,27 @@ class LoginViewController: UIViewController {
             txtPassword.isSecureTextEntry = true;
             passwordShowHideImage.image = UIImage(named: "passwordHide")
         }
+    }
+    func setupKeyBoardObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    @objc func handleKeyboardShow(notification : NSNotification){
+        let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
+        let keyboardDuration = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
+        self.view.window?.frame.origin.y = -(keyboardFrame!.height-200)
+        UIView.animate(withDuration: keyboardDuration!, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    @objc func handleKeyboardHide(notification : NSNotification){
+        let keyboardDuration = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
+        
+        self.view.window?.frame.origin.y = 0
+        UIView.animate(withDuration: keyboardDuration!, animations: {
+            self.view.layoutIfNeeded()
+        })
     }
 }
 

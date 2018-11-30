@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="dhg-4m-z9S">
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="dhg-4m-z9S">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                             </imageView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eaj-Yd-lJl">
@@ -91,12 +91,12 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="1eC-dB-lzb" secondAttribute="bottom" constant="35" id="3au-TD-a5p"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dhg-4m-z9S" secondAttribute="bottom" id="79M-8x-ZMK"/>
                             <constraint firstItem="1eC-dB-lzb" firstAttribute="baseline" secondItem="AYX-zd-fjT" secondAttribute="baseline" id="BMK-qh-UWe"/>
                             <constraint firstItem="1eC-dB-lzb" firstAttribute="leading" secondItem="AYX-zd-fjT" secondAttribute="trailing" constant="6" id="EdL-r8-kLF"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AYX-zd-fjT" secondAttribute="bottom" constant="40" id="Eur-RM-SIP"/>
                             <constraint firstItem="htK-wM-cIt" firstAttribute="top" secondItem="eaj-Yd-lJl" secondAttribute="bottom" constant="70" id="FAi-lb-MRs"/>
+                            <constraint firstItem="dhg-4m-z9S" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="IYY-cz-jKW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ffz-s8-QY3" secondAttribute="trailing" constant="45" id="Le2-DX-EoL"/>
                             <constraint firstItem="RQx-k4-2jJ" firstAttribute="centerX" secondItem="ndw-Dr-Cpn" secondAttribute="centerX" id="N5I-OF-CHe"/>
                             <constraint firstItem="dhg-4m-z9S" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="OLq-i9-PZV"/>
@@ -119,7 +119,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="obb-HY-qdy"/>
                     <connections>
-                        <outlet property="loginButton" destination="htK-wM-cIt" id="q4T-lM-h2y"/>
+                        <outlet property="loginButton" destination="htK-wM-cIt" id="Cp8-e1-8Qg"/>
                         <outlet property="passwordShowHideImage" destination="ffz-s8-QY3" id="b7l-PG-3tR"/>
                         <outlet property="txtEmail" destination="ndw-Dr-Cpn" id="gbr-ek-f5a"/>
                         <outlet property="txtPassword" destination="eaj-Yd-lJl" id="qms-2O-QoB"/>

@@ -57,14 +57,108 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         collectionView?.alwaysBounceVertical = true;
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-        setupInputComponents()
+       // setupInputComponents()
+        collectionView?.keyboardDismissMode = .interactive
+        //setupKeyBoardObserver()
      }
-
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+    }
+    lazy var containerView: UIView = {
+        let containerView = UIView()
+        containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
+        containerView.backgroundColor = UIColor.white
+        //containerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(navBar);
+        navBar.translatesAutoresizingMaskIntoConstraints = false
+        navBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive =  true
+        navBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive =  true
+        navBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        navBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        navBar.barTintColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
+        navBar.isTranslucent = false
+        //view.addSubview(containerView)
+        
+        let sendLocationView = UIImageView()
+        sendLocationView.image = UIImage(named: "location")
+        sendLocationView.translatesAutoresizingMaskIntoConstraints = false
+        sendLocationView.isUserInteractionEnabled = true
+        sendLocationView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSendLocation)))
+        containerView.addSubview(sendLocationView)
+        sendLocationView.leftAnchor.constraint(equalTo: containerView.leftAnchor,constant: 3).isActive = true
+        sendLocationView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        sendLocationView.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        sendLocationView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        let uploadImageView = UIImageView()
+        uploadImageView.image = UIImage(named: "photoLibrary")
+        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
+        uploadImageView.isUserInteractionEnabled = true
+        uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadImage)))
+        containerView.addSubview(uploadImageView)
+        //x,y,w,h
+        uploadImageView.leftAnchor.constraint(equalTo: sendLocationView.rightAnchor,constant: 8).isActive = true
+        uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        uploadImageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        uploadImageView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        //ios9 constraint anchors
+        //x,y,w,h
+//        //containerView.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 0).isActive = true
+//        containerView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+//        containerViewBottomAnchor = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//        containerViewBottomAnchor?.isActive = true
+//        containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//        containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//
+        //        let sendButton = UIButton(type: .system)
+        //        sendButton.setTitle("Send", for: UIControl.State())
+        //        sendButton.translatesAutoresizingMaskIntoConstraints = false
+        //        sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+        containerView.addSubview(sendButton)
+        //x,y,w,h
+        sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
+        
+        containerView.addSubview(messageText)
+        //x,y,w,h
+        messageText.leftAnchor.constraint(equalTo: uploadImageView.rightAnchor, constant: 8).isActive = true
+        messageText.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        messageText.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
+        messageText.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
+        
+        let separatorLineView = UIView()
+        separatorLineView.backgroundColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0);
+        separatorLineView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(separatorLineView)
+        //x,y,w,h
+        separatorLineView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        separatorLineView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        separatorLineView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
+        separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
+        return containerView
+    }()
+    override var inputAccessoryView: UIView? {
+        get {
+            return containerView
+        }
+    }
+    override var canBecomeFirstResponder : Bool {
+        return true
+    }
     func setupKeyBoardObserver(){
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
     
     var containerViewBottomAnchor: NSLayoutConstraint?
     
@@ -336,7 +430,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             height = estimateHeightOfMessage(text: textMessage).height + 20
         }
         else if let locationMessage = messages[indexPath.item].latitude{
-            height = estimateHeightOfMessage(text: "\(locationMessage),\(locationMessage)").height + 40
+            height = estimateHeightOfMessage(text: "\(locationMessage)").height + 40
         }
         else if let imgwidth = message.imageWidth?.floatValue, let imgheight = message.imageHeight?.floatValue{
             height = CGFloat( imgheight / imgwidth * 200)
@@ -395,9 +489,11 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         if message.latitude != nil {
             cell.locationImageView.isHidden = false;
             cell.locationMessage.isHidden = false;
+            cell.textView.isHidden = true
         } else {
            cell.locationImageView.isHidden = true;
             cell.locationMessage.isHidden = true;
+            cell.textView.isHidden = false
         }
     }
     private func estimateHeightOfMessage(text: String) -> CGRect{
@@ -452,7 +548,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         ]
         let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
         let mapItem = MKMapItem(placemark: placemark)
-        mapItem.name = "Your location"
+        mapItem.name = "Location"
         mapItem.openInMaps(launchOptions: options)
     }
     

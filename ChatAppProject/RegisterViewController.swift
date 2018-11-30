@@ -20,6 +20,7 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var passwordHideShowImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setUIView()
     }
     
