@@ -44,19 +44,77 @@ class LoginViewController: UIViewController {
         guard let email = txtEmail.text, let password = txtPassword.text else {
             return
         }
+        if(txtEmail.text==""||txtPassword.text==""){
+            selfObj.handleEmptyFields()
+        }
         Auth.auth().signIn(withEmail: email, password: password, completion: {
             (user, error) in
             
             if error != nil
             {
-                print(error!)
-                return
+                if( (error?._code)! == 17011){
+                    selfObj.hanleUserNotFound()
+                }
+                else if( (error?._code)! == 17008){
+                    selfObj.handleInvalidEmail()
+                }
+                else if( (error?._code)! == 17009){
+                  selfObj.handleWrongPassword()
+                }
+                else{
+                    let alert = UIAlertController(title: "Error Loggin in!", message: "Unexpected error occurred, Please try again", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    selfObj.txtEmail.text = ""
+                    selfObj.txtPassword.text=""
+                }
+//                if let error1 = AuthErrorCode(rawValue: (error?._code)!) {
+//                    _ =  type(of: (error?._code)!)
+//                    print("---error1   \(String(describing: error?._code))!")
+//                    print(error)
+//                    return
+            //}
             }
                 //Login successful 
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MessageTableViewController") as! MessageTableViewController
             selfObj.present(nextViewController, animated:true, completion:nil)
         })
+    }
+    
+    func handleEmptyFields(){
+        let alert = UIAlertController(title: "Error!", message: "All the feilds are mandatory.Please specify all the fields", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        return
+    }
+    
+    func handleInvalidEmail(){
+        let selfObj = self
+        let alert = UIAlertController(title: "Invalid email!", message: "Please enter valid email id", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
+            (action:UIAlertAction!) in
+            selfObj.txtEmail.text = ""
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    func hanleUserNotFound(){
+        let selfObj = self
+        let alert = UIAlertController(title: "User not found!", message: "Please register yourself if you are not registered", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
+            (action:UIAlertAction!) in
+            selfObj.txtEmail.text = ""
+            selfObj.txtPassword.text = ""
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    func handleWrongPassword(){
+        let selfObj = self
+        let alert = UIAlertController(title: "Wrong Password!", message: "Please enter your password again", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {(action:UIAlertAction!) in
+            selfObj.txtPassword.text = ""
+    }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func passwordShowHide(){
