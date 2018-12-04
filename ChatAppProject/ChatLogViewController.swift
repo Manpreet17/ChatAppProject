@@ -263,7 +263,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         self.present(nextViewController, animated:true, completion:{self.containerView.isHidden = true;})
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.dismiss(animated: true, completion: nil)
+        self.containerView.isHidden = false;
+        self.dismiss(animated: true, completion:nil)
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var selectedImage: UIImage?
@@ -276,7 +277,9 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         if let selectedImg = selectedImage{
             uploadImageToFirebase(image: selectedImg)
         }
-        self.dismiss(animated: true, completion: nil)
+       
+        self.dismiss(animated: true, completion: { self.containerView.isHidden = false;})
+        
     }
 
     func uploadImageToFirebase(image: UIImage){
@@ -327,8 +330,9 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         //incomplete
         let imagePickerController = UIImagePickerController()
         imagePickerController.allowsEditing = true;
+        self.containerView.isHidden = true;
         imagePickerController.delegate = self;
-        self.present(imagePickerController, animated: true, completion: {self.containerView.isHidden = true;})
+        self.present(imagePickerController, animated: true, completion: nil)
     }
     @objc func handleSendLocation(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
@@ -366,7 +370,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                     message.imageURL = dictionary["imageURL"] as? String
                     message.imageHeight = dictionary["imageHeight"] as? NSNumber
                     message.imageWidth = dictionary["imageWidth"] as? NSNumber
-                    self.containerView.isHidden = false;
+                    //self.containerView.isHidden = false;
                 }
                 message.timestamp = dictionary["timestamp"] as? NSNumber
                 //if message.partnerId() == self.user?.id{
