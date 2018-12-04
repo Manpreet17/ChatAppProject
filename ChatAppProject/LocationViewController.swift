@@ -21,7 +21,7 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
     var locationManager:CLLocationManager!
     override func viewDidLoad() {
         super.viewDidLoad()
-        backButton.action = #selector(loadController)
+        //backButton.action = #selector(loadController)
         determineMyCurrentLocation();
     }
     func determineMyCurrentLocation() {
@@ -95,6 +95,9 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
             self.loadChatLogController();
         })
 
+    }
+    @IBAction func BackToChatcontroller(_ sender: Any) {
+         loadChatLogController();
     }
     func fetchCityAndCountry(currentLocation: CLLocation,completion:@escaping (String)->()){
         let geocoder = CLGeocoder()
