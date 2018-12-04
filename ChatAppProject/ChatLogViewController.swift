@@ -474,28 +474,51 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.locationMessage.textColor = UIColor.black
             
         }
-        if let messageImageUrl = message.imageURL {
+//        if let messageImageUrl = message.imageURL {
+//            cell.messageImageView.loadImageUsingCacheWithUrlString(messageImageUrl)
+//            cell.messageImageView.isHidden = false
+//            cell.bubblesView.backgroundColor = UIColor.clear
+//            cell.textView.isHidden = true
+//            cell.locationImageView.isHidden = true
+//            cell.locationMessage.isHidden = true
+//        } else {
+//            cell.messageImageView.isHidden = true
+//            cell.textView.isHidden = false
+//            cell.locationImageView.isHidden = false
+//            cell.locationMessage.isHidden = false
+//        }
+//        if message.latitude != nil {
+//            cell.locationImageView.isHidden = false;
+//            cell.locationMessage.isHidden = false;
+//            cell.textView.isHidden = true
+//        } else {
+//           cell.locationImageView.isHidden = true;
+//            cell.locationMessage.isHidden = true;
+//            cell.textView.isHidden = false
+//        }
+        if  message.text != nil {
+            cell.textView.isHidden = false;
+            cell.locationImageView.isHidden = true
+            cell.locationMessage.isHidden = true
+            cell.messageImageView.isHidden = true
+            
+        }
+        else if let messageImageUrl = message.imageURL {
             cell.messageImageView.loadImageUsingCacheWithUrlString(messageImageUrl)
             cell.messageImageView.isHidden = false
             cell.bubblesView.backgroundColor = UIColor.clear
             cell.textView.isHidden = true
             cell.locationImageView.isHidden = true
             cell.locationMessage.isHidden = true
-        } else {
-            cell.messageImageView.isHidden = true
-            cell.textView.isHidden = false
-            cell.locationImageView.isHidden = false
-            cell.locationMessage.isHidden = false
         }
-        if message.latitude != nil {
+        else if message.latitude != nil {
             cell.locationImageView.isHidden = false;
             cell.locationMessage.isHidden = false;
             cell.textView.isHidden = true
-        } else {
-           cell.locationImageView.isHidden = true;
-            cell.locationMessage.isHidden = true;
-            cell.textView.isHidden = false
+            cell.messageImageView.isHidden = true
+            
         }
+        
     }
     private func estimateHeightOfMessage(text: String) -> CGRect{
         let size = CGSize(width: 200, height:1000)

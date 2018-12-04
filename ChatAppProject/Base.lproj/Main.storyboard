@@ -78,7 +78,7 @@
                                     <color key="titleColor" red="0.2722131559" green="0.61663594659999998" blue="0.98420317130000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
-                                    <segue destination="n3L-qX-MTB" kind="presentation" id="E7d-P5-cxw"/>
+                                    <segue destination="n3L-qX-MTB" kind="presentation" modalTransitionStyle="flipHorizontal" id="E7d-P5-cxw"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="passwordHide" translatesAutoresizingMaskIntoConstraints="NO" id="ffz-s8-QY3">
@@ -231,7 +231,7 @@
                                     <color key="titleColor" red="0.2722131559" green="0.61663594659999998" blue="0.98420317130000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="presentation" id="31l-Kc-PaG"/>
+                                    <segue destination="BYZ-38-t0r" kind="presentation" modalTransitionStyle="flipHorizontal" id="31l-Kc-PaG"/>
                                 </connections>
                             </button>
                         </subviews>
