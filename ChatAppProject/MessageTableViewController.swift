@@ -45,6 +45,8 @@ class MessageTableViewController: UITableViewController {
                         message.fromId = dictionary["fromId"] as? String
                         message.text = dictionary["text"] as? String
                         message.timestamp = dictionary["timestamp"] as? NSNumber
+                        message.latitude = dictionary["latitude"] as? Double
+                        message.imageURL = dictionary["imageURL"] as? String
                         self.messages.append(message)
                         if let partnerId = message.partnerId(){
                             self.messagesDictionary[partnerId] = message
@@ -61,31 +63,31 @@ class MessageTableViewController: UITableViewController {
                 
             },withCancel: nil)
         }
-        func observeMessage(){
-            let messageRef = Database.database().reference().child("messages")
-            messageRef.observe(.childAdded, with: {(snapshot) in
-                if let dictionary = snapshot.value as? [String: AnyObject]{
-                    let message = Message()
-                    message.toId = dictionary["toId"] as? String
-                    message.fromId = dictionary["fromId"] as? String
-                    message.text = dictionary["text"] as? String
-                    message.timestamp = dictionary["timestamp"] as? NSNumber
-                    self.messages.append(message)
-                    if let toId = message.toId{
-                        self.messagesDictionary[toId] = message
-                        
-                    }
-                    DispatchQueue.main.async(execute: {
-                        self.tableView.reloadData()
-                    })
-                    //                self.timer?.invalidate()
-                    //                print("canceled our timer")
-                    //
-                    //                self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
-                    //                print("schedule table reload in 0.1 sec")
-                    
-                }}, withCancel: nil)
-        }
+ //       func observeMessage(){
+//            let messageRef = Database.database().reference().child("messages")
+//            messageRef.observe(.childAdded, with: {(snapshot) in
+//                if let dictionary = snapshot.value as? [String: AnyObject]{
+//                    let message = Message()
+//                    message.toId = dictionary["toId"] as? String
+//                    message.fromId = dictionary["fromId"] as? String
+//                    message.text = dictionary["text"] as? String
+//                    message.timestamp = dictionary["timestamp"] as? NSNumber
+//                    self.messages.append(message)
+//                    if let toId = message.toId{
+//                        self.messagesDictionary[toId] = message
+//
+//                    }
+//                    DispatchQueue.main.async(execute: {
+//                        self.tableView.reloadData()
+//                    })
+//                    //                self.timer?.invalidate()
+//                    //                print("canceled our timer")
+//                    //
+//                    //                self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+//                    //                print("schedule table reload in 0.1 sec")
+//
+//                }}, withCancel: nil)
+//        }
         var timer: Timer?
     
     func attemptReloadOfTable() {
@@ -138,16 +140,16 @@ class MessageTableViewController: UITableViewController {
                 dateFormatter.dateFormat = "hh:mm:ss a"
                 cell.timestamp.text=dateFormatter.string(from: timeStampDate as Date)
                 
-            }
-           // if(message.text != nil){
+           }
+           if(message.text != nil){
                cell.messageText.text=message.text
-//          }
-//           else if(message.latitude != nil){
-//            cell.messageText.text = "Location"
-//          }
-//            else if(message.imageURL != nil){
-//                cell.messageText.text = "Image"
-//            }
+           }
+          else if(message.latitude != nil){
+            cell.messageText.text = "Attachment: Location"
+           }
+          else if(message.imageURL != nil){
+                cell.messageText.text = "Attachment: Image"
+           }
             return cell
         }
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

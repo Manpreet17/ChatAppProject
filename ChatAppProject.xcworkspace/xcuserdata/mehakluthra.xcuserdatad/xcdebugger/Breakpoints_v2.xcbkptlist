@@ -161,38 +161,6 @@
             endingLineNumber = "199"
             landmarkName = "uploadImageToFirebase(image:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChatAppProject.ChatLogViewController.imagePickerController(_: __C.UIImagePickerController, didFinishPickingMediaWithInfo: Swift.Dictionary&lt;__C.UIImagePickerControllerInfoKey, Any&gt;) -&gt; ()"
-                  moduleName = "ChatAppProject"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mehakluthra/Documents/ios%20Projects/ChatAppProject/ChatAppProject/ChatLogViewController.swift"
-                  timestampString = "565222655.9839489"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "179"
-                  endingLineNumber = "179"
-                  offsetFromSymbolStart = "1104">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChatAppProject.ChatLogViewController.imagePickerController(_: __C.UIImagePickerController, didFinishPickingMediaWithInfo: Swift.Dictionary&lt;__C.UIImagePickerControllerInfoKey, Any&gt;) -&gt; ()"
-                  moduleName = "ChatAppProject"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mehakluthra/Documents/ios%20Projects/ChatAppProject/ChatAppProject/ChatLogViewController.swift"
-                  timestampString = "565222655.9855829"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "179"
-                  endingLineNumber = "179"
-                  offsetFromSymbolStart = "1153">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -385,38 +353,6 @@
             endingLineNumber = "211"
             landmarkName = "sendMessageWithImageURL(imageURL:image:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChatAppProject.ChatLogViewController.uploadImageToFirebase(image: __C.UIImage) -&gt; ()"
-                  moduleName = "ChatAppProject"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mehakluthra/Documents/ios%20Projects/ChatAppProject/ChatAppProject/ChatLogViewController.swift"
-                  timestampString = "565222656.034915"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "191"
-                  endingLineNumber = "191"
-                  offsetFromSymbolStart = "914">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.FIRStorageMetadata&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in ChatAppProject.ChatLogViewController.uploadImageToFirebase(image: __C.UIImage) -&gt; ()"
-                  moduleName = "ChatAppProject"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mehakluthra/Documents/ios%20Projects/ChatAppProject/ChatAppProject/ChatLogViewController.swift"
-                  timestampString = "565222656.037068"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "192"
-                  endingLineNumber = "192"
-                  offsetFromSymbolStart = "71">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -497,6 +433,38 @@
             endingLineNumber = "314"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ChatAppProject.ChatLogViewController.(sendMessageWithImageURL in _E5CA1B9D945E66044FB691A03AEE8400)(imageURL: Swift.String, image: __C.UIImage) -&gt; ()"
+                  moduleName = "ChatAppProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mehakluthra/Documents/ios%20Projects/ChatAppProject/ChatAppProject/ChatLogViewController.swift"
+                  timestampString = "565654412.9277329"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "314"
+                  endingLineNumber = "314"
+                  offsetFromSymbolStart = "2674">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;, __C.FIRDatabaseReference) -&gt; () in ChatAppProject.ChatLogViewController.(sendMessageWithImageURL in _E5CA1B9D945E66044FB691A03AEE8400)(imageURL: Swift.String, image: __C.UIImage) -&gt; ()"
+                  moduleName = "ChatAppProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mehakluthra/Documents/ios%20Projects/ChatAppProject/ChatAppProject/ChatLogViewController.swift"
+                  timestampString = "565654412.929248"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "315"
+                  endingLineNumber = "315"
+                  offsetFromSymbolStart = "86">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -554,13 +522,29 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatAppProject/AppDelegate.swift"
-            timestampString = "565328487.198619"
+            timestampString = "565655069.4849809"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "6"
             endingLineNumber = "6"
             landmarkName = "unknown"
             landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChatAppProject/MessageTableViewController.swift"
+            timestampString = "565655069.4853081"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
