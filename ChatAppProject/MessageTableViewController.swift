@@ -13,14 +13,20 @@ class MessageTableViewController: UITableViewController {
     
     @IBOutlet weak var btnLogout: UIBarButtonItem!
     @IBOutlet weak var txtTitle: UINavigationItem!
-    
+    weak var activityIndicatorView: UIActivityIndicatorView!
     var messages = [Message]()
     var messagesDictionary = [String: Message]()
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserLoggedIn()
+        let activityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+        tableView.backgroundView = activityIndicatorView
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        self.activityIndicatorView = activityIndicatorView
+        activityIndicatorView.startAnimating()
         tableView.allowsMultipleSelectionDuringEditing = true
     }
+    
     func observeUserMessages(){
         guard let uid = Auth.auth().currentUser?.uid else {
             return
@@ -48,6 +54,7 @@ class MessageTableViewController: UITableViewController {
                             })
                         }
                         self.attemptReloadOfTable()
+                        
                     }
                 },withCancel: nil)
             },withCancel: nil)
@@ -94,6 +101,8 @@ class MessageTableViewController: UITableViewController {
             DispatchQueue.main.async(execute: {
                 self.tableView.reloadData()
             })
+    
+            self.activityIndicatorView.stopAnimating()
         }
         // MARK: - Table view data source
         
