@@ -20,14 +20,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         txtEmail.delegate = self;
         txtPassword.delegate = self;
         setUIView()
-       // setupKeyBoardObserver()
        }
-    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//
-//        NotificationCenter.default.removeObserver(self)
-//    }
     
     // MARK: Private Functions
     private func setUIView()
@@ -70,12 +63,6 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
                     selfObj.txtEmail.text = ""
                     selfObj.txtPassword.text=""
                 }
-//                if let error1 = AuthErrorCode(rawValue: (error?._code)!) {
-//                    _ =  type(of: (error?._code)!)
-//                    print("---error1   \(String(describing: error?._code))!")
-//                    print(error)
-//                    return
-            //}
             }
                 //Login successful 
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
@@ -131,27 +118,6 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
             passwordShowHideImage.image = UIImage(named: "passwordHide")
         }
     }
-//    func setupKeyBoardObserver(){
-//        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        
-//        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-//    }
-//    @objc func handleKeyboardShow(notification : NSNotification){
-//        let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
-//        let keyboardDuration = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
-//        self.view.window?.frame.origin.y = -(keyboardFrame!.height-300)
-//        UIView.animate(withDuration: keyboardDuration!, animations: {
-//            self.view.layoutIfNeeded()
-//        })
-//    }
-//    @objc func handleKeyboardHide(notification : NSNotification){
-//        let keyboardDuration = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
-//        
-//        self.view.window?.frame.origin.y = 0
-//        UIView.animate(withDuration: keyboardDuration!, animations: {
-//            self.view.layoutIfNeeded()
-//        })
-//    }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false

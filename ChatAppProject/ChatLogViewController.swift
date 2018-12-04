@@ -78,7 +78,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive =  true
         navBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive =  true
-        navBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        navBar.topAnchor.constraint(equalTo: view.topAnchor, constant:15).isActive = true
         navBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         navBar.barTintColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
         navBar.isTranslucent = false
@@ -92,8 +92,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         containerView.addSubview(sendLocationView)
         sendLocationView.leftAnchor.constraint(equalTo: containerView.leftAnchor,constant: 3).isActive = true
         sendLocationView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        sendLocationView.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        sendLocationView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        sendLocationView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        sendLocationView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         let uploadImageView = UIImageView()
         uploadImageView.image = UIImage(named: "photoLibrary")
@@ -174,7 +174,9 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         navBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         navBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         navBar.barTintColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
+        navBar.barStyle = .blackOpaque
         navBar.isTranslucent = false
+        
         
         view.addSubview(containerView)
         
@@ -186,8 +188,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         containerView.addSubview(sendLocationView)
         sendLocationView.leftAnchor.constraint(equalTo: containerView.leftAnchor,constant: 3).isActive = true
         sendLocationView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        sendLocationView.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        sendLocationView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        sendLocationView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        sendLocationView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         let uploadImageView = UIImageView()
         uploadImageView.image = UIImage(named: "photoLibrary")
@@ -379,7 +381,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                         self.collectionView?.reloadData()
                         //scroll to the last index
                         let indexPath = IndexPath(item: self.messages.count - 1, section: 0)
-                        self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
+                        self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: false)
                     })
                 //}
                 
@@ -478,28 +480,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.locationMessage.textColor = UIColor.black
             
         }
-//        if let messageImageUrl = message.imageURL {
-//            cell.messageImageView.loadImageUsingCacheWithUrlString(messageImageUrl)
-//            cell.messageImageView.isHidden = false
-//            cell.bubblesView.backgroundColor = UIColor.clear
-//            cell.textView.isHidden = true
-//            cell.locationImageView.isHidden = true
-//            cell.locationMessage.isHidden = true
-//        } else {
-//            cell.messageImageView.isHidden = true
-//            cell.textView.isHidden = false
-//            cell.locationImageView.isHidden = false
-//            cell.locationMessage.isHidden = false
-//        }
-//        if message.latitude != nil {
-//            cell.locationImageView.isHidden = false;
-//            cell.locationMessage.isHidden = false;
-//            cell.textView.isHidden = true
-//        } else {
-//           cell.locationImageView.isHidden = true;
-//            cell.locationMessage.isHidden = true;
-//            cell.textView.isHidden = false
-//        }
+
         if  message.text != nil {
             cell.textView.isHidden = false;
             cell.locationImageView.isHidden = true
@@ -586,8 +567,5 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         }
         return true;
     }
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-   
+  
 }

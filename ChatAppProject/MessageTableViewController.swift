@@ -21,7 +21,6 @@ class MessageTableViewController: UITableViewController {
         checkIfUserLoggedIn()
         let activityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
         tableView.backgroundView = activityIndicatorView
-        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         self.activityIndicatorView = activityIndicatorView
         activityIndicatorView.startAnimating()
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -63,31 +62,6 @@ class MessageTableViewController: UITableViewController {
                 
             },withCancel: nil)
         }
- //       func observeMessage(){
-//            let messageRef = Database.database().reference().child("messages")
-//            messageRef.observe(.childAdded, with: {(snapshot) in
-//                if let dictionary = snapshot.value as? [String: AnyObject]{
-//                    let message = Message()
-//                    message.toId = dictionary["toId"] as? String
-//                    message.fromId = dictionary["fromId"] as? String
-//                    message.text = dictionary["text"] as? String
-//                    message.timestamp = dictionary["timestamp"] as? NSNumber
-//                    self.messages.append(message)
-//                    if let toId = message.toId{
-//                        self.messagesDictionary[toId] = message
-//
-//                    }
-//                    DispatchQueue.main.async(execute: {
-//                        self.tableView.reloadData()
-//                    })
-//                    //                self.timer?.invalidate()
-//                    //                print("canceled our timer")
-//                    //
-//                    //                self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
-//                    //                print("schedule table reload in 0.1 sec")
-//
-//                }}, withCancel: nil)
-//        }
         var timer: Timer?
     
     func attemptReloadOfTable() {
@@ -261,7 +235,5 @@ class MessageTableViewController: UITableViewController {
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
             self.present(nextViewController, animated:true, completion:nil)
             
-        }
-        
-        
+        }  
 }

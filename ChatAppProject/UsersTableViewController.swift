@@ -43,19 +43,10 @@ class UsersTableViewController: UITableViewController {
         
         cell.userName.text = user.name
         cell.userEmail.text = user.email
+        cell.backgroundColor = UIColor.white
         return cell
     }
-
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        
-////            let chatLogController = ChatLogViewController(collectionViewLayout: UICollectionViewFlowLayout())
-////            chatLogController.user = users[indexPath.row]
-////            self.navigationController?.pushViewController(chatLogController, animated: true)
-//        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-//        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UserViewController") as! ChatLogViewController
-//        nextViewController.user = users[indexPath.row]
-//        self.present(nextViewController, animated:true, completion:nil)
-//    }
+    
      func fetchUsers(){
         Database.database().reference().child("users").observe(.childAdded, with: {
             (snapshot) in
@@ -93,5 +84,4 @@ class UsersTableViewController: UITableViewController {
             chatLogViewController.user = selectedUser;
         }
     }
-    
 }
