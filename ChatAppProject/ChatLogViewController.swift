@@ -55,9 +55,10 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 58, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 58, right: 0)
         collectionView?.alwaysBounceVertical = true;
+        //self.containerView.isHidden = false;
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-       // setupInputComponents()
+       //setupInputComponents()
         collectionView?.keyboardDismissMode = .interactive
         //setupKeyBoardObserver()
      }
@@ -65,7 +66,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
+        //self.containerView.isHidden = true;
         NotificationCenter.default.removeObserver(self)
     }
     lazy var containerView: UIView = {
@@ -259,7 +260,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     @objc func launchMessageTableViewController(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MessageTableViewController") as! MessageTableViewController
-        self.present(nextViewController, animated:true, completion:nil)
+        self.present(nextViewController, animated:true, completion:{self.containerView.isHidden = true;})
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
@@ -327,13 +328,13 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         let imagePickerController = UIImagePickerController()
         imagePickerController.allowsEditing = true;
         imagePickerController.delegate = self;
-        self.present(imagePickerController, animated: true, completion: nil)
+        self.present(imagePickerController, animated: true, completion: {self.containerView.isHidden = true;})
     }
     @objc func handleSendLocation(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LocationViewController") as! LocationViewController
         nextViewController.user = user
-        self.present(nextViewController, animated:true, completion:nil)
+        self.present(nextViewController, animated:true, completion:{self.containerView.isHidden = true;})
         
     }
     func observeMessages(){
@@ -365,7 +366,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                     message.imageURL = dictionary["imageURL"] as? String
                     message.imageHeight = dictionary["imageHeight"] as? NSNumber
                     message.imageWidth = dictionary["imageWidth"] as? NSNumber
-                    
+                    self.containerView.isHidden = false;
                 }
                 message.timestamp = dictionary["timestamp"] as? NSNumber
                 //if message.partnerId() == self.user?.id{

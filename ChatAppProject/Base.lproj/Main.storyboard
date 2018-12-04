@@ -190,7 +190,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ydy-jV-taC">
                                 <rect key="frame" x="40" y="285" width="295" height="35"/>
@@ -199,7 +199,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vnh-7g-MzN">
                                 <rect key="frame" x="40" y="230" width="295" height="35"/>
@@ -435,7 +435,7 @@
                         <viewLayoutGuide key="safeArea" id="jeY-uv-OBL"/>
                     </view>
                     <connections>
-                        <outlet property="backButton" destination="bkg-9Y-Odz" id="0yg-Hy-Q6q"/>
+                        <outlet property="backButton" destination="bkg-9Y-Odz" id="wmq-o4-Mt5"/>
                         <outlet property="map" destination="fNI-J9-9lW" id="92V-mT-elA"/>
                     </connections>
                 </viewController>

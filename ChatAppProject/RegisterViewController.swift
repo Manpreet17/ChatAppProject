@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class RegisterViewController: UIViewController {
+class RegisterViewController: UIViewController,UITextFieldDelegate {
 
     @IBOutlet weak var reenterPassword: UITextField!
     @IBOutlet weak var registerButton: UIButton!
@@ -20,7 +20,10 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var passwordHideShowImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        txtUsername.delegate = self;
+        txtEmail.delegate = self;
+        txtPassword.delegate = self;
+        reenterPassword.delegate = self;
         setUIView()
     }
     
@@ -149,5 +152,9 @@ class RegisterViewController: UIViewController {
             reenterPassword.isSecureTextEntry = true;
             reenterPasswordHideShowImage.image = UIImage(named: "passwordHide")
         }
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }
