@@ -78,7 +78,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive =  true
         navBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive =  true
-        navBar.topAnchor.constraint(equalTo: view.topAnchor, constant:15).isActive = true
+        navBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         navBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         navBar.barTintColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
         navBar.isTranslucent = false
