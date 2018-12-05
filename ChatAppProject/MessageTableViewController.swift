@@ -15,16 +15,17 @@ class MessageTableViewController: UITableViewController {
     @IBOutlet weak var txtTitle: UINavigationItem!
     weak var activityIndicatorView: UIActivityIndicatorView!
     var messages = [Message]()
+    var spinnerView = UIView.init()
     var messagesDictionary = [String: Message]()
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserLoggedIn()
-//        let activityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
-//        tableView.backgroundView = activityIndicatorView
-//        self.activityIndicatorView = activityIndicatorView
+    //  let activityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+    //  tableView.backgroundView = activityIndicatorView
+    //  self.activityIndicatorView = activityIndicatorView
         //activityIndicatorView.startAnimating()
         self.view.showBlurLoader()
-        tableView.allowsMultipleSelectionDuringEditing = true
+       tableView.allowsMultipleSelectionDuringEditing = true
     }
     
     func observeUserMessages(){
@@ -80,7 +81,6 @@ class MessageTableViewController: UITableViewController {
             })
     
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-               // self.activityIndicatorView.stopAnimating()
                 self.view.removeBluerLoader()
             }
         }

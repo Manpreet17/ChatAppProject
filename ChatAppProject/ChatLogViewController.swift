@@ -18,6 +18,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             observeMessages();
         }}
     var messages = [Message]()
+    var flag = 0;
     var spinnerView = UIView.init()
     lazy var messageText: UITextField = {
         let textField = UITextField()
@@ -61,6 +62,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         collectionView?.keyboardDismissMode = .interactive
         let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
         statusBar?.backgroundColor = UIColor.white
+        self.spinnerView = startSpin(onView: self.view)
     }
     
     
@@ -384,9 +386,12 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                         //scroll to the last index
                         let indexPath = IndexPath(item: self.messages.count - 1, section: 0)
                         self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: false)
+                        
                     })
-                //}
-                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.stopSpin(spinner: self.spinnerView)
+                }
+        
             }, withCancel: nil)
         }, withCancel: nil)
     }
