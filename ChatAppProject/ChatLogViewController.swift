@@ -18,6 +18,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             observeMessages();
         }}
     var messages = [Message]()
+    var spinnerView = UIView.init()
     lazy var messageText: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter message..."
@@ -278,8 +279,8 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         if let selectedImg = selectedImage{
             uploadImageToFirebase(image: selectedImg)
         }
-       
         self.dismiss(animated: true, completion: { self.containerView.isHidden = false;})
+        self.spinnerView = displaySpinner(onView: self.view)
         
     }
 
@@ -324,8 +325,10 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             ref.updateChildValues(values)
             let reciepentRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(toId).child(fromId)
             reciepentRef.updateChildValues(values)
+            
             print("message saved")
         })
+        removeSpinner(spinner: self.spinnerView)
     }
     @objc func handleUploadImage(){
         //incomplete
