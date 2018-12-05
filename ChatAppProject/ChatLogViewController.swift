@@ -55,13 +55,12 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 58, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 58, right: 0)
         collectionView?.alwaysBounceVertical = true;
-        //self.containerView.isHidden = false;
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-       //setupInputComponents()
         collectionView?.keyboardDismissMode = .interactive
-        //setupKeyBoardObserver()
-     }
+        let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
+        statusBar?.backgroundColor = UIColor.white
+    }
     
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -78,7 +77,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive =  true
         navBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive =  true
-        navBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        navBar.topAnchor.constraint(equalTo: view.topAnchor, constant:15).isActive = true
         navBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         navBar.barTintColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
         navBar.isTranslucent = false
@@ -171,7 +170,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive =  true
         navBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive =  true
-        navBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        navBar.topAnchor.constraint(equalTo: view.topAnchor, constant:15).isActive = true
         navBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         navBar.barTintColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
         navBar.barStyle = .blackOpaque
