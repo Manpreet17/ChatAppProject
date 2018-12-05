@@ -97,7 +97,7 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
             return false
         }
         else if(!emailValidate(email: txtEmail.text!)){
-            let alert = UIAlertController(title: "Error", message: "Email is not in the correct format", preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(title: "Invalid email!", message: "Please enter valid email id", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return false
