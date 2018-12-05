@@ -69,20 +69,20 @@ extension UIView{
     }
 }
 extension UIViewController {
-      func displaySpinner(onView : UIView) -> UIView {
-        let spinnerView = UIView.init(frame: onView.bounds)
-        spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-        let ai = UIActivityIndicatorView.init(style: .whiteLarge)
-        ai.startAnimating()
-        ai.center = spinnerView.center
+      func startSpin(onView : UIView) -> UIView {
+        let startSpinView = UIView.init(frame: onView.bounds)
+        startSpinView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+        let activityIndicator = UIActivityIndicatorView.init(style: .whiteLarge)
+        activityIndicator.startAnimating()
+        activityIndicator.center = startSpinView.center
         DispatchQueue.main.async {
-            spinnerView.addSubview(ai)
-            onView.addSubview(spinnerView)
+            startSpinView.addSubview(activityIndicator)
+            onView.addSubview(startSpinView)
         }
-        return spinnerView
+        return startSpinView
     }
     
-       func removeSpinner(spinner :UIView) {
+       func stopSpin(spinner :UIView) {
         DispatchQueue.main.async {
             spinner.removeFromSuperview()
         }

@@ -280,7 +280,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             uploadImageToFirebase(image: selectedImg)
         }
         self.dismiss(animated: true, completion: { self.containerView.isHidden = false;})
-        self.spinnerView = displaySpinner(onView: self.view)
+        self.spinnerView = startSpin(onView: self.view)
         
     }
 
@@ -328,7 +328,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             
             print("message saved")
         })
-        removeSpinner(spinner: self.spinnerView)
+        stopSpin(spinner: self.spinnerView)
     }
     @objc func handleUploadImage(){
         //incomplete
