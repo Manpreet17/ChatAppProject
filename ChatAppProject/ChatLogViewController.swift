@@ -61,7 +61,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.keyboardDismissMode = .interactive
         let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
-        statusBar?.backgroundColor = UIColor.white
+        statusBar?.backgroundColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
         self.spinnerView = startSpin(onView: self.view)
     }
     
