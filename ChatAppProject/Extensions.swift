@@ -11,11 +11,8 @@ import UIKit
 let imageCache = NSCache<AnyObject, AnyObject>()
 
 extension UIImageView {
-    
     func imgLoadCacheOrUrlString(_ stringURL: String) {
-        
         self.image = nil
-    
         if let imgCached = imageCache.object(forKey: stringURL as AnyObject) as? UIImage {
             self.image = imgCached
             return
@@ -35,6 +32,7 @@ extension UIImageView {
         }).resume()
     }
 }
+
 extension UIView{
     func showBlurLoader(){
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
@@ -58,8 +56,9 @@ extension UIView{
         }
     }
 }
+
 extension UIViewController {
-      func startSpin(onView : UIView) -> UIView {
+    func startSpin(onView : UIView) -> UIView {
         let startSpinView = UIView.init(frame: onView.bounds)
         startSpinView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
         let activityIndicator = UIActivityIndicatorView.init(style: .whiteLarge)
@@ -72,10 +71,11 @@ extension UIViewController {
         return startSpinView
     }
     
-       func stopSpin(spinner :UIView) {
+    func stopSpin(spinner :UIView) {
         DispatchQueue.main.async {
             spinner.removeFromSuperview()
         }
     }
+    
 }
 

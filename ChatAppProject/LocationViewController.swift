@@ -16,14 +16,15 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
     var country : String?
     var latitude = 0.0;
     var longitude = 0.0;
+    var locationManager:CLLocationManager!
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var map: MKMapView!
-    var locationManager:CLLocationManager!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //backButton.action = #selector(loadController)
         determineMyCurrentLocation();
     }
+    
     func determineMyCurrentLocation() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -31,12 +32,13 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
         locationManager.requestAlwaysAuthorization()
         if CLLocationManager.locationServicesEnabled() {
             locationManager.startUpdatingLocation()
-            //locationManager.startUpdatingHeading()
         }
     }
+    
     @objc func loadController(){
         loadChatLogController();
     }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let userLocation:CLLocation = locations[0] as CLLocation
         let center = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
@@ -48,11 +50,6 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
         myAnnotation.coordinate = CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude);
         myAnnotation.title = "Current location"
         map.addAnnotation(myAnnotation)
-        
-        // Call stopUpdatingLocation() to stop listening for location updates,
-        // other wise this function will be called every time when user location changes.
-        
-        // manager.stopUpdatingLocation()
         latitude = userLocation.coordinate.latitude;
         longitude = userLocation.coordinate.longitude;
     }
@@ -61,12 +58,9 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
     {
         print("Error \(error)")
     }
+    
     @IBAction func sendLocation(_ sender: Any) {
         determineMyCurrentLocation();
-        //openMapForPlace()
-//        fetchCityAndCountry(currentLocation: CLLocation(latitude: latitude, longitude: longitude),completion: {city in scope.city = city
-//            print(city)
-//        })
         print("user latitude = \(latitude)");
         print("user longitude = \(longitude)");
         sendLocationMessage(latitude: latitude,longitude: longitude)
@@ -78,7 +72,6 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
         let toId = user!.id!;
         let fromId = Auth.auth().currentUser!.uid
         let timestamp = Int(NSDate().timeIntervalSince1970);
-        
         let values = ["longitude":longitude,"latitude":latitude,"toId":toId,"fromId":fromId,"timestamp":timestamp] as [String : Any]
         childRef.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: {(err, messageRef) in
             if err != nil{
@@ -94,11 +87,12 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
             print("message saved")
             self.loadChatLogController();
         })
-
     }
+    
     @IBAction func BackToChatcontroller(_ sender: Any) {
          loadChatLogController();
     }
+    
     func fetchCityAndCountry(currentLocation: CLLocation,completion:@escaping (String)->()){
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(currentLocation, completionHandler: {(placemarks, error) -> Void in
@@ -110,8 +104,6 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
                 
                 let place = placemarks![0]
                 completion(place.locality!)
-                //scope.city = place.locality
-//                self.country = place.country
             }
         })
     }
@@ -121,13 +113,11 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UserViewController") as! ChatLogViewController
         nextViewController.user = self.user
         self.present(nextViewController, animated:true, completion:nil)
-        
     }
+    
     func openMapForPlace() {
-        
         let latitude: CLLocationDegrees = self.latitude
         let longitude: CLLocationDegrees = self.longitude
-        
         let regionDistance:CLLocationDistance = 200
         let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
         let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
@@ -140,5 +130,6 @@ class LocationViewController: UIViewController,CLLocationManagerDelegate {
         mapItem.name = "Your location"
         mapItem.openInMaps(launchOptions: options)
     }
+    
 }
 

@@ -34,20 +34,17 @@ class UsersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Table view cells are reused and should be dequeued using a cell identifier.
         let cellIdentifier = "UserTableViewCell"
-        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UserTableViewCell  else {
             fatalError("The dequeued cell is not an instance of UserTableViewCell.")
         }
-        
         let user = users[indexPath.row]
-        
         cell.userName.text = user.name
         cell.userEmail.text = user.email
         cell.backgroundColor = UIColor.white
         return cell
     }
     
-     func fetchUsers(){
+    func fetchUsers(){
         Database.database().reference().child("users").observe(.childAdded, with: {
             (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject]{
@@ -58,16 +55,15 @@ class UsersTableViewController: UITableViewController {
                 if(user.id != Auth.auth().currentUser?.uid){
                     self.users.append(user)
                 }
-                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-                
             }
         }, withCancel: nil)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       if segue.destination is ChatLogViewController{
+        if segue.destination is ChatLogViewController{
             guard let chatLogViewController = segue.destination as? ChatLogViewController else {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
@@ -84,4 +80,5 @@ class UsersTableViewController: UITableViewController {
             chatLogViewController.user = selectedUser;
         }
     }
+    
 }

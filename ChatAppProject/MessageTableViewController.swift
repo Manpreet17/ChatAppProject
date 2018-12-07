@@ -17,15 +17,13 @@ class MessageTableViewController: UITableViewController {
     var messages = [Message]()
     var spinnerView = UIView.init()
     var messagesDictionary = [String: Message]()
+    var timer: Timer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserLoggedIn()
-    //  let activityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
-    //  tableView.backgroundView = activityIndicatorView
-    //  self.activityIndicatorView = activityIndicatorView
-        //activityIndicatorView.startAnimating()
         self.view.showBlurLoader()
-       tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.allowsMultipleSelectionDuringEditing = true
     }
     
     func lookUserMessages(){
@@ -57,35 +55,33 @@ class MessageTableViewController: UITableViewController {
                             })
                         }
                         self.attemptReloadOfTable()
-                        
                     }
                 },withCancel: nil)
             },withCancel: nil)
-                
-            },withCancel: nil)
-        }
-        var timer: Timer?
+            
+        },withCancel: nil)
+    }
+    
     
     func attemptReloadOfTable() {
         self.timer?.invalidate()
-        
         self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
     }
-        @objc func handleReloadTable() {
-            self.messages = Array(self.messagesDictionary.values)
-            self.messages.sort(by: {(message1, message2)-> Bool in
-                return message1.timestamp!.intValue > message2.timestamp!.intValue
-            })
-            DispatchQueue.main.async(execute: {
-                self.tableView.reloadData()
-            })
     
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self.view.removeBluerLoader()
-            }
+    @objc func handleReloadTable() {
+        self.messages = Array(self.messagesDictionary.values)
+        self.messages.sort(by: {(message1, message2)-> Bool in
+            return message1.timestamp!.intValue > message2.timestamp!.intValue
+        })
+        DispatchQueue.main.async(execute: {
+            self.tableView.reloadData()
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.view.removeBluerLoader()
         }
+    }
+    
         // MARK: - Table view data source
-        
         override func numberOfSections(in tableView: UITableView) -> Int {
             // #warning Incomplete implementation, return the number of sections
             return 1
@@ -96,148 +92,135 @@ class MessageTableViewController: UITableViewController {
             return messages.count
         }
         
-        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cellIdentifier = "MessageTableViewCell"
-            
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? MessageTableViewCell  else {
-                fatalError("The dequeued cell is not an instance of MessageTableViewCell.")
-            }
-            let message = messages[indexPath.row]
-            
-            if let id = message.partnerId(){
-                let ref =  Database.database().reference().child("users").child(id)
-                ref.observeSingleEvent(of: .value, with: {(snapshot) in
-                    if let dictionary = snapshot.value as? [String: AnyObject]{
-                        cell.toId.text = dictionary["name"] as? String
-                    }
-                })
-            }
-            if let timeInSeconds = message.timestamp?.doubleValue{
-                let timeStampDate = NSDate(timeIntervalSince1970: timeInSeconds)
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "hh:mm:ss a"
-                cell.timestamp.text=dateFormatter.string(from: timeStampDate as Date)
-                
-           }
-           if(message.text != nil){
-               cell.messageText.text=message.text
-           }
-          else if(message.latitude != nil){
-            cell.messageText.text = "Attachment: Location"
-           }
-          else if(message.imageURL != nil){
-                cell.messageText.text = "Attachment: Image"
-           }
-            return cell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cellIdentifier = "MessageTableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? MessageTableViewCell  else {
+            fatalError("The dequeued cell is not an instance of MessageTableViewCell.")
         }
+        let message = messages[indexPath.row]
+        if let id = message.partnerId(){
+            let ref =  Database.database().reference().child("users").child(id)
+            ref.observeSingleEvent(of: .value, with: {(snapshot) in
+                if let dictionary = snapshot.value as? [String: AnyObject]{
+                    cell.toId.text = dictionary["name"] as? String
+                }
+            })
+        }
+        if let timeInSeconds = message.timestamp?.doubleValue{
+            let timeStampDate = NSDate(timeIntervalSince1970: timeInSeconds)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "hh:mm:ss a"
+            cell.timestamp.text=dateFormatter.string(from: timeStampDate as Date)
+            
+        }
+        if(message.text != nil){
+            cell.messageText.text=message.text
+        }
+        else if(message.latitude != nil){
+            cell.messageText.text = "Attachment: Location"
+        }
+        else if(message.imageURL != nil){
+            cell.messageText.text = "Attachment: Image"
+        }
+        return cell
+    }
+    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
         guard let uid = Auth.auth().currentUser?.uid  else {
             return
         }
-        
         let message = self.messages[indexPath.row]
-        
         if let partnerId = message.partnerId() {
             Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(uid).child(partnerId).removeValue(completionBlock: { (error, ref) in
-                
                 if error != nil {
                     print("Failed to delete message:", error!)
                     return
                 }
-                
                 self.messagesDictionary.removeValue(forKey: partnerId)
                 self.attemptReloadOfTable()
-                
-                //                //this is one way of updating the table, but its actually not that safe..
-                //                self.messages.removeAtIndex(indexPath.row)
-                //                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                
             })
         }
     }
         
-        func checkIfUserLoggedIn(){
-            let selfObj = self
-            //check if user is not logged in
-            if Auth.auth().currentUser?.uid == nil{
-                logOutUser()
-            }
-            else{
-                let user = Auth.auth().currentUser?.uid
-                Database.database().reference().child("users").child(user!).observeSingleEvent(of: .value, with:  {
-                    (snapshot) in
-                    if let dictionary = snapshot.value as? [String: AnyObject]{
-                        selfObj.txtTitle.title = dictionary["name"] as? String
-                        selfObj.messages.removeAll();
-                        selfObj.messagesDictionary.removeAll();
-                        selfObj.tableView.reloadData();
-                        selfObj.lookUserMessages()
-                    }
-                })
-            }
+    func checkIfUserLoggedIn(){
+        let selfObj = self
+        //check if user is not logged in
+        if Auth.auth().currentUser?.uid == nil{
+            logOutUser()
         }
+        else{
+            let user = Auth.auth().currentUser?.uid
+            Database.database().reference().child("users").child(user!).observeSingleEvent(of: .value, with:  {
+                (snapshot) in
+                if let dictionary = snapshot.value as? [String: AnyObject]{
+                    selfObj.txtTitle.title = dictionary["name"] as? String
+                    selfObj.messages.removeAll();
+                    selfObj.messagesDictionary.removeAll();
+                    selfObj.tableView.reloadData();
+                    selfObj.lookUserMessages()
+                }
+            })
+        }
+    }
         
-        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            if segue.destination is ChatLogViewController{
-                guard let chatLogViewController = segue.destination as? ChatLogViewController else {
-                    fatalError("Unexpected destination: \(segue.destination)")
-                }
-                
-                guard let selectedUserCell = sender as? MessageTableViewCell else {
-                    fatalError("Unexpected sender: \(String(describing: sender))")
-                }
-                
-                guard let indexPath = tableView.indexPath(for: selectedUserCell) else {
-                    fatalError("The selected cell is not being displayed by the table")
-                }
-                
-                let message = messages[indexPath.row]
-                guard let partnerId = message.partnerId() else{
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.destination is ChatLogViewController{
+            guard let chatLogViewController = segue.destination as? ChatLogViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            guard let selectedUserCell = sender as? MessageTableViewCell else {
+                fatalError("Unexpected sender: \(String(describing: sender))")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedUserCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let message = messages[indexPath.row]
+            guard let partnerId = message.partnerId() else{
+                return
+            }
+            let userRef = Database.database().reference().child("users").child(partnerId)
+            
+            userRef.observeSingleEvent(of: .value, with: {(snapshot) in
+                guard let dictionary = snapshot.value as? [String: AnyObject] else{
                     return
                 }
-                let userRef = Database.database().reference().child("users").child(partnerId)
-                
-                userRef.observeSingleEvent(of: .value, with: {(snapshot) in
-                    guard let dictionary = snapshot.value as? [String: AnyObject] else{
-                        return
-                    }
-                    let user = Users()
-                    user.id = partnerId
-                    // user.id = dictionary["id"] as? String
-                    user.name = dictionary["name"] as? String
-                    user.email = dictionary["email"] as? String
-                    
-                    //let chatLogController = ChatLogViewController(collectionViewLayout: UICollectionViewFlowLayout())
-                    let selectedUser =  user;
-                    chatLogViewController.user = selectedUser;
-                    //chatLogController.user =  users[indexPath.row]
-                    //self.navigationController?.pushViewController(chatLogController, animated: true)
-                })
-                
-            }
-        }
-        
-        func logOutUser(){
-            do{
-                try Auth.auth().signOut()
-            }catch let logoutError{
-                print(logoutError)
-            }
-        }
-        
-        @IBAction func btnLogoutOnClick(_ sender: Any) {
-            // logout user
-            logOutUser()
+                let user = Users()
+                user.id = partnerId
+                // user.id = dictionary["id"] as? String
+                user.name = dictionary["name"] as? String
+                user.email = dictionary["email"] as? String
+                let selectedUser =  user;
+                chatLogViewController.user = selectedUser;
+            })
             
-            // Navigate to Login View Controller
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
-            self.present(nextViewController, animated:true, completion:nil)
-            
-        }  
+        }
+    }
+        
+    func logOutUser(){
+        do{
+            try Auth.auth().signOut()
+        }catch let logoutError{
+            print(logoutError)
+        }
+    }
+        
+    @IBAction func btnLogoutOnClick(_ sender: Any) {
+        // logout user
+        logOutUser()
+        
+        // Navigate to Login View Controller
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
+        self.present(nextViewController, animated:true, completion:nil)
+        
+    }
+    
 }

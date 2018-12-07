@@ -10,6 +10,10 @@ import UIKit
 
 class ChatCollectionViewCell: UICollectionViewCell {
     
+    var bubbleViewRightAnchor: NSLayoutConstraint?
+    var bubbleViewLeftAnchor: NSLayoutConstraint?
+    var bubbleWidthConstraint : NSLayoutConstraint?
+    
     let textView: UITextView = {
         let tView = UITextView()
         tView.font = UIFont.systemFont(ofSize: 16)
@@ -61,10 +65,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         locationText.isEditable = false
         return locationText
     }()
-    
-    var bubbleViewRightAnchor: NSLayoutConstraint?
-    var bubbleViewLeftAnchor: NSLayoutConstraint?
-    var bubbleWidthConstraint : NSLayoutConstraint?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(bubblesView)
@@ -82,25 +83,24 @@ class ChatCollectionViewCell: UICollectionViewCell {
         locationImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         locationImageView.isHidden = true;
         addSubview(locationMessage)
+        
         locationMessage.leftAnchor.constraint(equalTo: locationImageView.rightAnchor, constant:  6).isActive = true
         locationMessage.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         locationMessage.rightAnchor.constraint(equalTo: bubblesView.rightAnchor).isActive = true
-        //textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         locationMessage.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         locationImageView.isHidden = true;
+        
         bubbleViewRightAnchor = bubblesView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8)
         bubbleViewRightAnchor?.isActive = true
         bubbleViewLeftAnchor = bubblesView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8)
         bubblesView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         bubbleWidthConstraint = bubblesView.widthAnchor.constraint(equalToConstant: 200)
         bubbleWidthConstraint?.isActive = true
-        
         bubblesView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         
         textView.leftAnchor.constraint(equalTo: bubblesView.leftAnchor, constant: 8).isActive = true
         textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         textView.rightAnchor.constraint(equalTo: bubblesView.rightAnchor).isActive = true
-        //textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         textView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         
     }
@@ -108,4 +108,5 @@ class ChatCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }

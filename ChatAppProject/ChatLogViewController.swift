@@ -11,18 +11,24 @@ import Firebase
 import MapKit
 import os.log
 class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var user : Users?{
-        didSet{
-            print(user?.name as Any)
-           self.navItem.title  = user?.name
-            self.flag = 0
-            lookForMessages();
-        }}
+    
     var messages = [Message]()
     var flag = 0;
     var containerBottomAnchor: NSLayoutConstraint?
-    
     var spinnerView = UIView.init()
+    var latitude = 0.0;
+    var longitude = 0.0
+    let cellId = "cellId";
+    var city = ""
+    
+    var user : Users?{
+        didSet{
+            print(user?.name as Any)
+            self.navItem.title  = user?.name
+            self.flag = 0
+            lookForMessages();
+        }}
+    
     lazy var messageText: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter message..."
@@ -30,8 +36,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         textField.delegate = self
         return textField
     }()
-    var latitude = 0.0;
-    var longitude = 0.0
+    
     lazy var navItem: UINavigationItem = {
         let navItem = UINavigationItem(title: "Title");
         return navItem
@@ -53,32 +58,6 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         return sendButton
     }()
     
-    override func viewDidLoad() {
-        
-        super.viewDidLoad();
-        messageText.delegate=self;
-        collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 58, right: 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 58, right: 0)
-        collectionView?.alwaysBounceVertical = true;
-        collectionView?.backgroundColor = UIColor.white
-        collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView?.keyboardDismissMode = .interactive
-        let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
-        statusBar?.backgroundColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
-        self.spinnerView = startSpin(onView: self.view)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(false);
-            if(self.flag==0){
-                self.stopSpin(spinner: self.spinnerView)
-            
-        }
-    }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
     lazy var containerView: UIView = {
         let containerView = UIView()
         containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
@@ -142,21 +121,48 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         
         return containerView
     }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad();
+        messageText.delegate=self;
+        collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 58, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 58, right: 0)
+        collectionView?.alwaysBounceVertical = true;
+        collectionView?.backgroundColor = UIColor.white
+        collectionView?.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView?.keyboardDismissMode = .interactive
+        let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
+        statusBar?.backgroundColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1.0)
+        self.spinnerView = startSpin(onView: self.view)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(false);
+        if(self.flag==0){
+            self.stopSpin(spinner: self.spinnerView)
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override var inputAccessoryView: UIView? {
         get {
             return containerView
         }
     }
+    
     override var canBecomeFirstResponder : Bool {
         return true
     }
+    
     func setupKeyBoardObserver(){
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
-    
     
     @objc func handleKeyboardShow(notificationObject : NSNotification){
         let frame = (notificationObject.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
@@ -167,6 +173,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             self.view.layoutIfNeeded()
         })
     }
+    
     @objc func handleKeyboardHide(notificationObject : NSNotification){
         let duration = (notificationObject.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
         
@@ -181,10 +188,12 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MessageTableViewController") as! MessageTableViewController
         self.present(nextViewController, animated:true, completion:{self.containerView.isHidden = true;})
     }
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.containerView.isHidden = false;
         self.dismiss(animated: true, completion:nil)
     }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var selectedImage: UIImage?
         if let editedImage = info[.editedImage] as? UIImage?{
@@ -198,7 +207,6 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         }
         self.dismiss(animated: true, completion: { self.containerView.isHidden = false;})
         self.spinnerView = startSpin(onView: self.view)
-        
     }
 
     func uploadImageToFirebase(image: UIImage){
@@ -218,10 +226,10 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                     }
                     selfObj.sendMessageWithImageURL(imageURL: (url?.absoluteString)!, image: image)
                 })
-                })
-            
+            })
+        }
     }
-    }
+    
     fileprivate func sendMessageWithImageURL(imageURL: String, image: UIImage){
         let messageRef = Database.database().reference().child("messages")
         let childRef = messageRef.childByAutoId();
@@ -247,6 +255,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         })
         stopSpin(spinner: self.spinnerView)
     }
+    
     @objc func handleUploadImage(){
         //incomplete
         let imagePickerController = UIImagePickerController()
@@ -255,22 +264,21 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
         imagePickerController.delegate = self;
         self.present(imagePickerController, animated: true, completion: nil)
     }
+    
     @objc func handleSendLocation(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LocationViewController") as! LocationViewController
         nextViewController.user = user
         self.present(nextViewController, animated:true, completion:{self.containerView.isHidden = true;})
-        
     }
+    
     func lookForMessages(){
-       
         guard let uid = Auth.auth().currentUser?.uid, let toId = user?.id else {
             return
         }
-        
         let userMessagesRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(uid).child(toId)
-         userMessagesRef.observe(.childAdded, with: { (snapshot) in
-              self.flag = 1;
+        userMessagesRef.observe(.childAdded, with: { (snapshot) in
+            self.flag = 1;
             let messageId = snapshot.key
             let messagesRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("messages").child(messageId)
             messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -296,27 +304,24 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
                 }
                 message.timestamp = dictionary["timestamp"] as? NSNumber
                 //if message.partnerId() == self.user?.id{
-                    self.messages.append(message)
-                    DispatchQueue.main.async(execute: {
-                        self.collectionView?.reloadData()
-                        //scroll to the last index
-                        let indexPath = IndexPath(item: self.messages.count - 1, section: 0)
-                        self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: false)
-                        
-                    })
+                self.messages.append(message)
+                DispatchQueue.main.async(execute: {
+                    self.collectionView?.reloadData()
+                    //scroll to the last index
+                    let indexPath = IndexPath(item: self.messages.count - 1, section: 0)
+                    self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: false)
+                    
+                })
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.stopSpin(spinner: self.spinnerView)
                 }
-        
             }, withCancel: nil)
         }, withCancel: nil )
-        
     }
-    let cellId = "cellId";
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
     }
-    var city = ""
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatCollectionViewCell
@@ -332,22 +337,22 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: message.text!).width + 32
             return cell
         }
-       if (message.longitude != nil){
-        fetchCityAndCountry(currentLocation: CLLocation(latitude: message.latitude!, longitude: message.longitude!), completion: { city,country in
-            DispatchQueue.main.async(execute: {
-                cell.locationMessage.text = "\(city), \(country)"
+        if (message.longitude != nil){
+            fetchCityAndCountry(currentLocation: CLLocation(latitude: message.latitude!, longitude: message.longitude!), completion: { city,country in
+                DispatchQueue.main.async(execute: {
+                    cell.locationMessage.text = "\(city), \(country)"
+                })
             })
-        })
-       self.latitude = message.latitude!
-       self.longitude = message.longitude!
-       setUpCellUI(cell: cell, message: message)
-        cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))").width+32
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapClicked))
-        cell.locationImageView.addGestureRecognizer(tapGesture)
-        cell.locationMessage.addGestureRecognizer(tapGesture)
-        cell.addGestureRecognizer(tapGesture)
-        return cell
+            self.latitude = message.latitude!
+            self.longitude = message.longitude!
+            setUpCellUI(cell: cell, message: message)
+            cell.bubbleWidthConstraint?.constant = estimateHeightOfMessage(text: "latitude: \(String(describing: message.latitude!)) longitude: \(String(describing: message.longitude!))").width+32
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapClicked))
+            cell.locationImageView.addGestureRecognizer(tapGesture)
+            cell.locationMessage.addGestureRecognizer(tapGesture)
+            cell.addGestureRecognizer(tapGesture)
+            return cell
         }
         return cell
     }
@@ -385,7 +390,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     }
     
     private func setUpCellUI(cell : ChatCollectionViewCell, message: Message){
-    
+        
         if message.fromId == Auth.auth().currentUser!.uid{
             //sent message bubble
             cell.bubblesView.backgroundColor = ChatCollectionViewCell.blueColor
@@ -404,7 +409,6 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.locationMessage.textColor = UIColor.black
             
         }
-
         if  message.text != nil {
             cell.textView.isHidden = false;
             cell.locationImageView.isHidden = true
@@ -425,10 +429,9 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             cell.locationMessage.isHidden = false;
             cell.textView.isHidden = true
             cell.messageImageView.isHidden = true
-            
         }
-        
     }
+    
     private func estimateHeightOfMessage(text: String) -> CGRect{
         let size = CGSize(width: 200, height:1000)
         let option = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
@@ -441,33 +444,33 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
     
     @objc func sendMessage() {
         if(self.messageText.text == ""){
-            
         }
         else{
-        //observed error here to be discussed
-        let messageRef = Database.database().reference().child("messages")
-        let childRef = messageRef.childByAutoId();
-        let toId = user!.id!;
-        let fromId = Auth.auth().currentUser!.uid
-        let timestamp = Int(NSDate().timeIntervalSince1970);
-        
-        let values = ["text":messageText.text!,"toId":toId,"fromId":fromId,"timestamp":timestamp] as [String : Any]
-        childRef.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: {(err, messageRef) in
-            if err != nil{
-                print(err!)
-                return
-            }
-            self.messageText.text = nil;
-            let ref = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(fromId).child(toId)
-            let messageId = childRef.key;
-            let values = [messageId:1]
-            ref.updateChildValues(values)
-            let reciepentRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(toId).child(fromId)
-            reciepentRef.updateChildValues(values)
-            print("message saved")
-        })
+            //observed error here to be discussed
+            let messageRef = Database.database().reference().child("messages")
+            let childRef = messageRef.childByAutoId();
+            let toId = user!.id!;
+            let fromId = Auth.auth().currentUser!.uid
+            let timestamp = Int(NSDate().timeIntervalSince1970);
+            
+            let values = ["text":messageText.text!,"toId":toId,"fromId":fromId,"timestamp":timestamp] as [String : Any]
+            childRef.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: {(err, messageRef) in
+                if err != nil{
+                    print(err!)
+                    return
+                }
+                self.messageText.text = nil;
+                let ref = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(fromId).child(toId)
+                let messageId = childRef.key;
+                let values = [messageId:1]
+                ref.updateChildValues(values)
+                let reciepentRef = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/").child("user-messages").child(toId).child(fromId)
+                reciepentRef.updateChildValues(values)
+                print("message saved")
+            })
         }
     }
+    
     @objc func mapClicked(){
         let latitude: CLLocationDegrees = self.latitude
         let longitude: CLLocationDegrees = self.longitude

@@ -18,6 +18,7 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var txtUsername: UITextField!
     @IBOutlet weak var reenterPasswordHideShowImage: UIImageView!
     @IBOutlet weak var passwordHideShowImage: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         txtUsername.delegate = self;
@@ -27,7 +28,6 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
         setUIView()
     }
     
-    // MARK: Private Functions
     private func setUIView()
     {
         //Setting register button border and color
@@ -50,35 +50,32 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
             guard let email = txtEmail.text, let password = txtPassword.text else {
                 return
             }
-        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-            if error != nil
-            {
-                // if error in registering
-                print(error!)
-                return
-            }
-            guard let uid = authResult?.user.uid else {
-                return
-            }
-        
-            // user successfully authenticated
-            // adding users to database
-            let ref = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/")
-            let userRef = ref.child("users").child(uid)
-            let values = ["name":self.txtUsername.text, "email":self.txtEmail.text]
-            userRef.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: { (err, ref) in
-                if err != nil{
-                    print(err!)
+            Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+                if error != nil
+                {
+                    print(error!)
                     return
                 }
-                print("user is saved successfully into database")
-                 selfObj.registerOnSuccess()
-    
-            })
+                guard let uid = authResult?.user.uid else {
+                    return
+                }
+                // user successfully authenticated
+                // adding users to database
+                let ref = Database.database().reference(fromURL: "https://chatappproject-627da.firebaseio.com/")
+                let userRef = ref.child("users").child(uid)
+                let values = ["name":self.txtUsername.text, "email":self.txtEmail.text]
+                userRef.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: { (err, ref) in
+                    if err != nil{
+                        print(err!)
+                        return
+                    }
+                    print("user is saved successfully into database")
+                    selfObj.registerOnSuccess()
+                })
+            }
         }
-        }
-        
     }
+    
     func registerOnSuccess(){
         let selfObj = self
         let alert = UIAlertController(title: "Sucessfully Registered!", message: "Congrats! You have been successfully registered. Please Login to use chat app.", preferredStyle: UIAlertController.Style.alert)
@@ -87,13 +84,13 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
             selfObj.navigateToLoginScreen()
         }))
         self.present(alert, animated: true, completion: nil)
-        
     }
+    
     func checkErrorCases()->Bool{
         if(txtEmail.text==""||reenterPassword.text==""||txtPassword.text==""||txtUsername.text==""){
             let alert = UIAlertController(title: "Error", message: "All the feilds are mandatory.Please specify all the fields", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-              self.present(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
             return false
         }
         else if(!emailValidate(email: txtEmail.text!)){
@@ -115,20 +112,20 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
             return false
         }
         return true
-       
     }
+    
     func emailValidate(email:String) -> Bool {
-        
         let formatOfEmail = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", formatOfEmail)
         return predicate.evaluate(with: email)
-        
     }
+    
     func navigateToLoginScreen(){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginView") as! LoginViewController
         self.present(nextViewController, animated:true, completion:nil)
     }
+    
     @objc func passwordShowHide(){
         if( passwordHideShowImage.image?.isEqual(UIImage(named: "passwordHide")) == true ){
             passwordHideShowImage.image = UIImage(named: "passwordSee")
@@ -141,6 +138,7 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
             passwordHideShowImage.image = UIImage(named: "passwordHide")
         }
     }
+    
     @objc func reeneterPasswordShowHide(){
         if( reenterPasswordHideShowImage.image?.isEqual(UIImage(named: "passwordHide")) == true ){
             reenterPasswordHideShowImage.image = UIImage(named: "passwordSee")
@@ -153,8 +151,10 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
             reenterPasswordHideShowImage.image = UIImage(named: "passwordHide")
         }
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
+
 }
