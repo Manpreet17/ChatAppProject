@@ -12,38 +12,28 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 
 extension UIImageView {
     
-    func loadImageUsingCacheWithUrlString(_ urlString: String) {
+    func imgLoadCacheOrUrlString(_ stringURL: String) {
         
         self.image = nil
-        
-        //check cache for image first
-        if let cachedImage = imageCache.object(forKey: urlString as AnyObject) as? UIImage {
-            self.image = cachedImage
+    
+        if let imgCached = imageCache.object(forKey: stringURL as AnyObject) as? UIImage {
+            self.image = imgCached
             return
         }
-        
-        //otherwise fire off a new download
-        let url = URL(string: urlString)
-        URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
-            
-            //download hit an error so lets return out
+        let urlImg = URL(string: stringURL)
+        URLSession.shared.dataTask(with: urlImg!, completionHandler: { (data, response, error) in
             if error != nil {
                 print(error ?? "")
                 return
             }
-            
             DispatchQueue.main.async(execute: {
-                
-                if let downloadedImage = UIImage(data: data!) {
-                    imageCache.setObject(downloadedImage, forKey: urlString as AnyObject)
-                    
-                    self.image = downloadedImage
+                if let imgDownloadedFromURL = UIImage(data: data!) {
+                    imageCache.setObject(imgDownloadedFromURL, forKey: stringURL as AnyObject)
+                    self.image = imgDownloadedFromURL
                 }
             })
-            
         }).resume()
     }
-    
 }
 extension UIView{
     func showBlurLoader(){

@@ -496,7 +496,7 @@ class ChatLogViewController:UICollectionViewController, UITextFieldDelegate,UICo
             
         }
         else if let messageImageUrl = message.imageURL {
-            cell.messageImageView.loadImageUsingCacheWithUrlString(messageImageUrl)
+            cell.messageImageView.imgLoadCacheOrUrlString(messageImageUrl)
             cell.messageImageView.isHidden = false
             cell.bubblesView.backgroundColor = UIColor.clear
             cell.textView.isHidden = true
