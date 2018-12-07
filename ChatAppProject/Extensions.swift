@@ -34,23 +34,23 @@ extension UIImageView {
 }
 
 extension UIView{
-    func showBlurLoader(){
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    func displayBlurEffect(){
+        let effect = UIBlurEffect(style: UIBlurEffect.Style.regular)
+        let blurView = UIVisualEffectView(effect: effect)
+        blurView.frame = self.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        let activityIndicator = UIActivityIndicatorView(style: .gray)
-        activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        activityIndicator.startAnimating()
+        let loadingIndicator = UIActivityIndicatorView(style: .gray)
+        loadingIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        loadingIndicator.startAnimating()
         
-        blurEffectView.contentView.addSubview(activityIndicator)
-        activityIndicator.center = blurEffectView.contentView.center
+        blurView.contentView.addSubview(loadingIndicator)
+        loadingIndicator.center = blurView.contentView.center
         
-        self.addSubview(blurEffectView)
+        self.addSubview(blurView)
     }
     
-    func removeBluerLoader(){
+    func hideBlurEffect(){
         self.subviews.compactMap {  $0 as? UIVisualEffectView }.forEach {
             $0.removeFromSuperview()
         }

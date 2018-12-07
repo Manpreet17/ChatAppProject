@@ -22,7 +22,7 @@ class MessageTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserLoggedIn()
-        self.view.showBlurLoader()
+        self.view.displayBlurEffect()
         tableView.allowsMultipleSelectionDuringEditing = true
     }
     
@@ -77,7 +77,7 @@ class MessageTableViewController: UITableViewController {
             self.tableView.reloadData()
         })
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            self.view.removeBluerLoader()
+            self.view.hideBlurEffect()
         }
     }
     
