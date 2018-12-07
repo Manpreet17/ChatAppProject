@@ -28,7 +28,7 @@ class MessageTableViewController: UITableViewController {
        tableView.allowsMultipleSelectionDuringEditing = true
     }
     
-    func observeUserMessages(){
+    func lookUserMessages(){
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
@@ -176,7 +176,7 @@ class MessageTableViewController: UITableViewController {
                         selfObj.messages.removeAll();
                         selfObj.messagesDictionary.removeAll();
                         selfObj.tableView.reloadData();
-                        selfObj.observeUserMessages()
+                        selfObj.lookUserMessages()
                     }
                 })
             }
