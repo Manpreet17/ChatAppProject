@@ -18,12 +18,18 @@ class MessageTableViewController: UITableViewController {
     var spinnerView = UIView.init()
     var messagesDictionary = [String: Message]()
     var timer: Timer?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserLoggedIn()
         self.view.displayBlurEffect()
         tableView.allowsMultipleSelectionDuringEditing = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(false);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.view.hideBlurEffect()
+        }
     }
     
     func lookUserMessages(){
